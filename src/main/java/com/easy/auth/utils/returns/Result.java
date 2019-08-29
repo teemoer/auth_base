@@ -19,127 +19,139 @@ import java.io.Serializable;
 // @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result implements Serializable {
 
-  private static final long serialVersionUID = 8094214056827400324L;
-  private Boolean code;
+    private static final long serialVersionUID = 8094214056827400324L;
+    private Boolean success;
+    private Integer code;
 
-  private String msg;
+    private String msg;
 
-  private Object data;
+    private Object data;
 
-  public Result() {}
+    public Result() {
+    }
 
-  public Result(Boolean code, String msg) {
-    this.code = code;
-    this.msg = msg;
-  }
+    public Result(Boolean success, String msg) {
+        this.success = success;
+        this.msg = msg;
+    }
 
-  public Result(String msg, Boolean code) {
-    this.code = code;
-    this.msg = msg;
-  }
+    public Result(String msg, Boolean success) {
+        this.success = success;
+        this.msg = msg;
+    }
 
-  public Result(String msg, Boolean i, Object dataObj) {
-    this.code = i;
-    this.msg = msg;
-    this.data = dataObj;
-  }
+    public Result(String msg, Boolean success, Object dataObj) {
+        this.success = success;
+        this.msg = msg;
+        this.data = dataObj;
+    }
 
-  public Result(String msg) {
-    this.code = false;
-    this.msg = msg;
-  }
+    public Result(String msg) {
+        this.success = false;
+        this.msg = msg;
+        this.code = 200;
+    }
 
-  public static Result success() {
-    Result result = new Result();
-    result.setCode(true);
-    result.setData(true);
-    return result;
-  }
+    public static Result success() {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setData(true);
+        result.setCode(200);
+        return result;
+    }
 
-  public static Result success(Object data) {
-    Result result = new Result();
-    result.setCode(true);
-    result.setData(data);
-    return result;
-  }
-
-
-
+    public static Result success(Object data) {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setCode(200);
+        result.setData(data);
+        return result;
+    }
 
 
     public static Result success(String msg, Object data) {
         Result result = new Result();
-        result.setCode(true);
+        result.setCode(200);
+        result.setSuccess(true);
         result.setMsg(msg);
         result.setData(data);
         return result;
     }
 
 
+    public static Result failure(String msg) {
+        Result result = new Result();
+        result.setSuccess(false);
+        result.setCode(-200);
+        result.setMsg(msg);
+        return result;
+    }
 
-  public static Result failure(String msg) {
-    Result result = new Result();
-    result.setCode(false);
-    result.setMsg(msg);
-    return result;
-  }
-  public static Result failure(String msg,Object  data) {
-    Result result = new Result();
-    result.setCode(false);
-    result.setData(data);
-    result.setMsg(msg);
-    return result;
-  }
-  public static Result failure() {
-    Result result = new Result();
-    result.setCode(false);
-    result.setMsg("操作失败!");
-    return result;
-  }
+    public static Result failure(String msg, Object data) {
+        Result result = new Result();
+        result.setSuccess(false);
+        result.setCode(-200);
+        result.setData(data);
+        result.setMsg(msg);
+        return result;
+    }
 
-  public static Result failure(Object object) {
-    Result result = new Result();
-    result.setCode(false);
-    result.setData(object);
-    return result;
-  }
+    public static Result failure() {
+        Result result = new Result();
+        result.setCode(false);
+        result.setMsg("操作失败!");
+        return result;
+    }
+
+    public static Result failure(Object object) {
+        Result result = new Result();
+        result.setCode(-200);
+        result.setSuccess(false);
+        result.setData(object);
+        return result;
+    }
 
 
+    public static Result fail() {
+        Result result = new Result();
+        result.setCode(-200);
+        result.setSuccess(false);
+        result.setData(null);
+        result.setMsg("操作失败!");
+        return result;
+    }
 
-  public static Result fail() {
-    Result result = new Result();
-    result.setCode(false);
-    result.setData(null);
-    result.setMsg("操作失败!");
-    return result;
-  }
+    public static Result fail(String msg) {
+        Result result = new Result();
+        result.setCode(-200);
+        result.setSuccess(false);
+        result.setData(null);
+        result.setMsg(msg);
+        return result;
+    }
 
-  public static Result fail(String msg) {
-    Result result = new Result();
-    result.setCode(false);
-    result.setData(null);
-    result.setMsg(msg);
-    return result;
-  }
-  public static Result fail(String msg,Object o) {
-    Result result = new Result();
-    result.setCode(false);
-    result.setData(o);
-    result.setMsg(msg);
-    return result;
-  }
+    public static Result fail(String msg, Object o) {
+        Result result = new Result();
+        result.setCode(-200);
+        result.setSuccess(false);
+        result.setData(o);
+        result.setMsg(msg);
+        return result;
+    }
 
     public Boolean judgeSuccess() {
-        return this.code;
+        return this.getSuccess();
     }
 
-  public void setResultCode(ResultCode resultCode) {
-    
-    if (resultCode.code()==1){
-      setCode(true);
-    }else {
-      setCode(false);
+    public void setResultCode(ResultCode resultCode) {
+
+        if (resultCode.code() == 1) {
+            setCode(200);
+            setSuccess(true);
+        } else {
+            setCode(-200);
+            setSuccess(false);
+        }
+        setMsg(resultCode.message());
     }
-    setMsg(resultCode.message());
-  }
 }
