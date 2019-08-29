@@ -14,9 +14,12 @@ import java.io.Serializable;
  * <p>@email: 832192@qq.com
  *
  * <p>@Source: Created with IntelliJ IDEA.
+ * <p>
+ *
+ *
+ * `@JsonInclude(JsonInclude.Include.NON_NULL)  //为 不输出  为null 的key
  */
 @Data
-// @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result implements Serializable {
 
     private static final long serialVersionUID = 8094214056827400324L;
