@@ -1,4 +1,6 @@
 
+#  Author:连晋
+
 ## 基于 springBoot/mybatis/mysql/redis 开发的 一个 权限校验系统 支持 分布式 系统
 
 - 项目暂未开发完毕 暂时先上传部分代码
@@ -28,7 +30,7 @@
 [点我快速打开http://127.0.0.1:5600](http://127.0.0.1:5600)
 
 
-## Swagger2 在线api文档使用说明  Author:连晋
+## Swagger2 在线api文档使用说明 
 
 - swagger2 的UI 本人已经做过修改
     - 汉化UI界面
