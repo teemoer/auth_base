@@ -64,7 +64,7 @@ public class LoginController {
      *
      * <p>双用户登录的写法
      *
-     * <p>下面的写法 实属无奈之举
+     * <p>
      *
      * @param adminLoginDto
      * @param bResult
