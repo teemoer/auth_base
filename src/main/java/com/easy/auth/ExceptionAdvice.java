@@ -64,7 +64,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
 
     Result result = new Result();
-    result.setData("参数解析失败,错误信息为:" + e.getMessage() + " \n错误编号为:" + generateErorCode());
+      result.setData("参数解析失败,错误信息为:" + e.getMessage() + " \n错误编号为:" + generateErrorCode());
     logger.error(
             "\n解析参数400报错,"
                     + ResultCode.BAD_REQUEST.message()
@@ -94,7 +94,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result result = new Result();
     result.setResultCode(ResultCode.METHOD_NOT_ALLOWED);
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求405跨域错误,"
                     + ResultCode.METHOD_NOT_ALLOWED.message()
@@ -115,7 +115,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result result = new Result();
     result.setResultCode(ResultCode.INVALID_TOKEN);
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求授权错误,"
                     + ResultCode.INVALID_TOKEN.message()
@@ -137,7 +137,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result result = new Result();
     result.setResultCode(ResultCode.INVALID_TOKEN);
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求授权错误,"
                     + ResultCode.INVALID_TOKEN.message()
@@ -162,7 +162,7 @@ public class ExceptionAdvice {
           UnauthorizedException e, HttpServletRequest httpServletRequest) {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result failure = Result.failure(ResultCode.UNAUTHO_ERROR);
-    failure.setData("错误编号为:" + generateErorCode());
+      failure.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求授权错误,"
                     + ResultCode.UNAUTHO_ERROR.message()
@@ -183,7 +183,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
       RedisUtil.adminOperatingSysUserModule();
     Result result = new Result();
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求授权错误,"
                     + ResultCode.UNAUTHO_ERROR.message()
@@ -211,7 +211,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result result = new Result();
     result.setResultCode(ResultCode.ARGUMENT_TYPE_MISMATCH);
-    result.setData("参数类型转化错误信息为:" + e.getMessage() + " \n 错误编号为:" + generateErorCode());
+      result.setData("参数类型转化错误信息为:" + e.getMessage() + " \n 错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求服务器错误,参数转化异常 \nurl:"
                     + requestInfo.getRequestUrl()
@@ -235,7 +235,7 @@ public class ExceptionAdvice {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
     Result result = new Result();
     result.setResultCode(ResultCode.SYSTEM_ERR);
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求服务器错误,服务器内部错误 \nurl:"
                     + requestInfo.getRequestUrl()
@@ -255,7 +255,7 @@ public class ExceptionAdvice {
     Result result = new Result();
     result.setCode(false);
     result.setMsg("接口:" + requestInfo.getRequestUrl() + " 不存在！");
-    result.setData("错误编号为:" + generateErorCode());
+      result.setData("错误编号为:" + generateErrorCode());
     logger.error(
             "\n请求服务器错误,服务器内部错误 \nurl:"
                     + requestInfo.getRequestUrl()
@@ -271,7 +271,7 @@ public class ExceptionAdvice {
     return new AdviceDto(httpServletRequest);
   }
 
-  private String generateErorCode() {
+    private String generateErrorCode() {
     return UUID.randomUUID().toString().replaceAll("-", "");
   }
 }
