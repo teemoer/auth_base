@@ -30,6 +30,13 @@
 
 ## Swagger2 在线api文档使用说明  Author:连晋
 
+- swagger2 的UI 本人已经做过修改
+    - 汉化UI界面
+    
+    - 增加 api地址一键复制
+    
+    - 修复 js解析node节点与项目中 bean或dto 字段冲突时 出现的 bug
+
 ## api接口 swagger2 常用注解的使用
 
 
