@@ -181,7 +181,7 @@ public class ExceptionAdvice {
   public Result unauthenticatedException(
           UnauthenticatedException e, HttpServletRequest httpServletRequest) {
     AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    RedisUtil.adminOperatingSysUnitmanageModule();
+      RedisUtil.adminOperatingSysUserModule();
     Result result = new Result();
     result.setData("错误编号为:" + generateErorCode());
     logger.error(
