@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.auth.dao.UserMapper">
+    <!-- User的resultMap,column是给数据库列起的别名,它对应property类的属性 -->
+    <resultMap id="result_User_Map" type="com.easy.auth.bean.User">
+        <id column="id" property="id"/>
+        <result column="userName" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="enableStatus" property="enableStatus"/>
+        <result column="createDate" property="createDate"/>
+        <result column="uniquenessId" property="uniquenessId"/>
+    </resultMap>
+
+    <!-- 数据库中表名为:user的列名 -->
+    <sql id="user_Column">
+		id as id,userName as userName,password as password,enableStatus as enableStatus,createDate as createDate,uniquenessId as uniquenessId
+    </sql>
+    <!-- assist是查询辅助工具类, ${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- updateAssist用于更新数据查询辅助工具类,作用assist与一致 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+    <!--获得类名为:User对应的数据库表的数据总行数 -->
+    <select id="getUserRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+        select count(*) from user
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </select>
+
+    <!-- 获得类名为:User对应数据库中表的数据集合 -->
+    <select id="selectUser" parameterType="com.util.Assist" resultMap="result_User_Map">
+        select
+        <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+                <include refid="user_Column"/>
+            </otherwise>
+        </choose>
+        from user
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+        <if test="order !=null">${order}</if>
+        <choose>
+            <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize}</when>
+            <when test="rowSize !=null">LIMIT #{rowSize}</when>
+        </choose>
+    </select>
+    <!-- 通过User的id获得对应数据库中表的数据对象 -->
+    <select id="selectUserById" parameterType="Integer" resultMap="result_User_Map">
+        select
+        <include refid="user_Column"/>
+        from user
+        where id = #{id}
+    </select>
+
+    <!-- 获得一个User对象,以参数User对象中不为空的属性作为条件进行查询 -->
+    <select id="selectUserObjSingle" parameterType="com.easy.auth.bean.User" resultMap="result_User_Map">
+        select
+        <include refid="user_Column"/>
+        from user
+        <where>
+            <if test="userName != null">and userName = #{userName}</if>
+            <if test="password != null">and password = #{password}</if>
+            <if test="enableStatus != null">and enableStatus = #{enableStatus,jdbcType=VARCHAR}</if>
+            <if test="createDate != null">and createDate = #{createDate}</if>
+            <if test="uniquenessId != null">and uniquenessId = #{uniquenessId}</if>
+            <if test="id != null">and id = #{id}</if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!-- 获得User对象,以参数User对象中不为空的属性作为条件进行查询 -->
+    <select id="selectUserByObj" parameterType="com.easy.auth.bean.User" resultMap="result_User_Map">
+        select
+        <include refid="user_Column"/>
+        from user
+        <where>
+            <if test="userName != null">and userName = #{userName}</if>
+            <if test="password != null">and password = #{password}</if>
+            <if test="enableStatus != null">and enableStatus = #{enableStatus,jdbcType=VARCHAR}</if>
+            <if test="createDate != null">and createDate = #{createDate}</if>
+            <if test="uniquenessId != null">and uniquenessId = #{uniquenessId}</if>
+            <if test="id != null">and id = #{id}</if>
+        </where>
+    </select>
+    <select id="selectOneByUserName" resultType="com.easy.auth.bean.User">
+        select
+        <include refid="user_Column"/>
+        from user where userName=#{userName}
+    </select>
+    <select id="getUserByUserUniquenessId" resultMap="result_User_Map">
+        select
+        <include refid="user_Column"/>
+        from sys_user where uniquenessId = #{userUniquenessId};
+    </select>
+
+    <!-- 将User插入到对应数据库的表中,包括属性值为null的数据 -->
+    <insert id="insertUser" parameterType="com.easy.auth.bean.User">
+        insert into
+	user (id,userName,password,enableStatus,createDate,uniquenessId)
+        values(#{id},#{userName},#{password},#{enableStatus,jdbcType=VARCHAR},#{createDate},#{uniquenessId})
+    </insert>
+
+    <!-- 将User中属性值不为null的数据,插入到对应数据库的表中 -->
+    <insert id="insertNotNullUser" parameterType="com.easy.auth.bean.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userName != null">userName,</if>
+            <if test="password != null">password,</if>
+            <if test="enableStatus != null">enableStatus,</if>
+            <if test="createDate != null">createDate,</if>
+            <if test="uniquenessId != null">uniquenessId,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="password != null">#{password},</if>
+            <if test="enableStatus != null">#{enableStatus,jdbcType=VARCHAR},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="uniquenessId != null">#{uniquenessId},</if>
+        </trim>
+    </insert>
+
+    <!-- 将User批量插入到对应数据库的表中 -->
+    <insert id="insertUserByBatch" parameterType="ArrayList">
+        insert into user(id,userName,password,enableStatus,createDate,uniquenessId) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.userName},#{item.password},#{item.enableStatus,jdbcType=VARCHAR},#{item.createDate},#{item.uniquenessId})
+        </foreach>
+    </insert>
+
+    <!-- 通过User的id将数据库表中对应的数据删除 -->
+    <delete id="deleteUserById" parameterType="Integer">
+        delete from user
+        where  id  =  #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将User对应的数据库表的数据删除 -->
+    <delete id="deleteUserByAssist" parameterType="com.util.Assist">
+        delete from user
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </delete>
+
+    <!-- 通过User的id将User的数据更新到数据库中对应的表,包括值null的数据 -->
+    <update id="updateUserById" parameterType="com.easy.auth.bean.User">
+        update user set
+        <set>
+            userName = #{userName} ,
+            password = #{password} ,
+            enableStatus = #{enableStatus,jdbcType=VARCHAR} ,
+            createDate = #{createDate} ,
+            uniquenessId = #{uniquenessId} ,
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过User的id将User中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullUserById" parameterType="com.easy.auth.bean.User">
+        update user
+        <set>
+            <if test="userName != null">userName = #{userName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="enableStatus != null">enableStatus = #{enableStatus,jdbcType=VARCHAR},</if>
+            <if test="createDate != null">createDate = #{createDate},</if>
+            <if test="uniquenessId != null">uniquenessId = #{uniquenessId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将User中的数据更新到数据库对应的表中,包括值为null的数据 -->
+    <update id="updateUser" parameterType="map">
+        update user
+        <set>
+            id = #{enti.id},
+            userName = #{enti.userName},
+            password = #{enti.password},
+            enableStatus = #{enti.enableStatus,jdbcType=VARCHAR},
+            createDate = #{enti.createDate},
+            uniquenessId = #{enti.uniquenessId},
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将User中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullUser" parameterType="map">
+        update user
+        <set>
+            <if test="enti.id != null">id = #{enti.id},</if>
+            <if test="enti.userName != null">userName = #{enti.userName},</if>
+            <if test="enti.password != null">password = #{enti.password},</if>
+            <if test="enti.enableStatus != null">enableStatus = #{enti.enableStatus,jdbcType=VARCHAR},</if>
+            <if test="enti.createDate != null">createDate = #{enti.createDate},</if>
+            <if test="enti.uniquenessId != null">uniquenessId = #{enti.uniquenessId},</if>
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+</mapper>

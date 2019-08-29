@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.auth.dao.SysApiWhiteListMapper">
+    <!-- SysConfig的resultMap,column是给数据库列起的别名,它对应property类的属性 -->
+    <resultMap id="result_SysApiWhiteList_Map" type="com.easy.auth.bean.SysApiWhiteList">
+        <id column="id" property="id"/>
+        <result column="api_name" property="apiName"/>
+        <result column="api_url" property="apiUrl"/>
+        <result column="mark" property="mark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    <!-- 数据库中表名为:sys_api_white_list的列名 -->
+    <sql id="sys_api_white_list_Column">
+        id  , api_name  ,
+        api_url  ,
+        mark  ,
+        create_time
+    </sql>
+    <!--获得类名为:SysApiWhiteList对应的数据库表的数据总行数 -->
+    <select id="getSysApiWhiteListRowCount" parameterType="com.easy.auth.bean.SysApiWhiteList"
+            resultType="java.lang.Long">
+        SELECT count(*)
+        FROM sys_api_white_list
+    </select>
+    <select id="selectSysApiWhiteList" resultMap="result_SysApiWhiteList_Map">
+        select
+        <include refid="sys_api_white_list_Column"/>
+        from sys_api_white_list
+    </select>
+    <!-- 通过SysApiWhiteList的id获得对应数据库中表的数据对象 -->
+    <select id="selectSysApiWhiteListById" parameterType="Integer" resultMap="result_SysApiWhiteList_Map">
+        select
+        <include refid="sys_api_white_list_Column"/>
+        from sys_api_white_list
+        where id = #{id}
+    </select>
+    <!-- 获得SysApiWhiteList对象,以参数SysApiWhiteList对象中不为空的属性作为条件进行查询 -->
+    <select id="selectSysApiWhiteListByObj" parameterType="com.easy.auth.bean.SysApiWhiteList"
+            resultMap="result_SysApiWhiteList_Map">
+        select
+        <include refid="sys_api_white_list_Column"/>
+        from sys_api_white_list
+        <where>
+            <if test="apiName != null">and api_name like "%"#{apiName}"%"</if>
+            <if test="apiUrl != null">and api_url like "%"#{apiUrl}"%"</if>
+            <if test="mark != null">and mark like "%"#{mark}"%"</if>
+            <if test="id != null">and id = #{id}</if>
+        </where>
+    </select>
+    <select id="getAllWhiteUrlList" resultType="java.lang.String">
+        SELECT api_url
+        FROM sys_api_white_list;
+    </select>
+    <select id="countByApiUrl" resultType="java.lang.Integer">
+        select count(id)
+        from sys_api_white_list
+        WHERE api_url = #{apiUrl}
+    </select>
+    <!-- 将SysApiWhiteList中属性值不为null的数据,插入到对应数据库的表中 -->
+    <insert id="insertNotNullSysApiWhiteList" parameterType="com.easy.auth.bean.SysApiWhiteList">
+        insert into sys_api_white_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="apiName != null">api_name,</if>
+            <if test="apiUrl != null">api_url,</if>
+            <if test="mark != null">mark,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="apiName != null">#{apiName},</if>
+            <if test="apiUrl != null">#{apiUrl},</if>
+            <if test="mark != null">#{mark},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+    <!-- 将SysApiWhiteList批量插入到对应数据库的表中 -->
+    <insert id="insertSysApiWhiteListByBatch" parameterType="ArrayList">
+        insert into sys_api_white_list(id,api_name,api_url,mark,create_time) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.apiName},#{item.apiUrl},#{item.mark},#{item.createTime})
+        </foreach>
+    </insert>
+    <!-- 通过SysApiWhiteList的id将数据库表中对应的数据删除 -->
+    <delete id="deleteSysApiWhiteListById" parameterType="Integer">
+        DELETE
+        FROM sys_api_white_list
+        WHERE id = #{id}
+    </delete>
+    <!-- 通过SysApiWhiteList的id将SysApiWhiteList中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullSysApiWhiteListById" parameterType="com.easy.auth.bean.SysApiWhiteList">
+        update sys_api_white_list
+        <set>
+            <if test="apiName != null">api_name = #{apiName},</if>
+            <if test="apiUrl != null">api_url = #{apiUrl},</if>
+            <if test="mark != null">mark = #{mark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </set>
+        where id =#{id}
+    </update>
+</mapper>

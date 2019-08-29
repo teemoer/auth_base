@@ -1,0 +1,178 @@
+package com.easy.auth.controller.login;
+
+import com.easy.auth.bean.SysUser;
+import com.easy.auth.common.AdminLoginDto;
+import com.easy.auth.common.AdminLoginFormDbDto;
+import com.easy.auth.common.SysConstans;
+import com.easy.auth.enums.common.EnableStatusEnum;
+import com.easy.auth.enums.user.UserTableTypeEnum;
+import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
+import com.easy.auth.paramconfig.ConfigMessage;
+import com.easy.auth.service.SysUserService;
+import com.easy.auth.service.UserService;
+import com.easy.auth.utils.GetErrors;
+import com.easy.auth.utils.returns.Result;
+import com.easy.auth.utils.user.UserInfoUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户登录 控制层
+ *
+ * <p>@Author: 连晋
+ *
+ * <p>@Description:
+ *
+ * <p>@email: 832192@qq.com
+ *
+ * <p>@Source: Created with IntelliJ IDEA.
+ */
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
+@RestController
+@RequestMapping(value = "/api")
+@PropertySource({"classpath:application.properties"})
+@Api("用户登录 - 控制层")
+public class LoginController {
+
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private UserService userService;
+
+
+    /**
+     * 登录接口
+     *
+     * <p>双用户的写法 在我接手的项目的时候 项目就这样设计了
+     *
+     * <p>下面的写法 实属无奈之举
+     *
+     * @param adminLoginDto
+     * @param bResult
+     * @return
+     */
+    @PostMapping("/common/login")
+    @ApiOperation("  后台  登录接口")
+    public Result adminLogin(
+            @RequestBody @Valid @ApiParam(required = true) AdminLoginDto adminLoginDto,
+            BindingResult bResult) {
+        if (bResult.hasErrors()) {
+            return GetErrors.getErrorMsg(bResult);
+        }
+
+        AdminLoginFormDbDto adminLoginFormDbDto =
+                sysUserService.selectOneByUserName(adminLoginDto.getUserName());
+        /*
+         * 如果查询不到 sysUser  尝试 查找 user 表
+         */
+        if (adminLoginFormDbDto == null) {
+            adminLoginFormDbDto = userService.selectOneByUserName(adminLoginDto.getUserName());
+        }
+
+        /*
+         * 开始检查 用户信息合法性
+         */
+        if (adminLoginFormDbDto == null) {
+            return Result.fail("登录失败,该用户不存在!");
+        } else if (StringUtils.isBlank(adminLoginFormDbDto.getUniquenessId())) {
+            return Result.fail("登录失败,该用户暂未分配唯一标示,请联系开发人员!");
+        } else if (EnableStatusEnum.DISABLED.getValue().equals(adminLoginFormDbDto.getEnableStatus().getValue())) {
+            return Result.failure(ConfigMessage.USE_USER);
+        }
+
+
+
+        /*
+         *检测密码一致 为登录成功  存储用户信息到redis 并返回唯一token
+         */
+        if (adminLoginFormDbDto.getPassword().equalsIgnoreCase(adminLoginDto.getPassword())) {
+
+            String jwt =
+                    UserInfoUtils.getToken(
+                            adminLoginFormDbDto.getUniquenessId(), adminLoginFormDbDto.getPassword());
+
+            Map<String, Object> outLoginInfoMap = new HashMap(6);
+            outLoginInfoMap.put("token", jwt);
+            adminLoginFormDbDto.setToken(jwt);
+            List modelList = null;
+            /*
+             *控制json输出 密码为 null
+             */
+            adminLoginFormDbDto.setPassword(null);
+            if (adminLoginFormDbDto instanceof SysUser) {
+                /*
+                 * 普通用户
+                 */
+                modelList = sysUserService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
+
+                outLoginInfoMap.put("user", adminLoginFormDbDto);
+                /*
+                 * 获取当前用户所拥有的 模块的 下所拥有的所有功能id
+                 */
+                List<String> function = sysUserService.findFunctionListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
+
+                outLoginInfoMap.put("function", function);
+                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.SYS_USER.getValue());
+            } else {
+                /*
+                 *单位用户
+                 */
+                outLoginInfoMap.put("user", adminLoginFormDbDto);
+                /*
+                 * 获取当前单位拥有的模块菜单
+                 */
+                modelList = userService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
+                /*
+                 * 获取当前单位模块的所有功能id
+                 */
+                List<String> function = userService.findFunctionListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
+                outLoginInfoMap.put("function", function);
+                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.USER.getValue());
+            }
+            outLoginInfoMap.put("modelList", modelList);
+            RedisUtil.addLoginInfo(jwt, adminLoginFormDbDto, SysConstans.AUTH_TIME_OUT);
+            return Result.success(outLoginInfoMap);
+        } else {
+            return Result.fail("登录失败,用户或密码错误");
+        }
+    }
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
+    @PostMapping("/common/logout")
+    @ApiOperation("用户退出系统")
+    public Result logout(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            if (StringUtils.isNotBlank(token)) {
+                RedisUtil.del(token);
+            }
+        } catch (Exception e) {
+            logger.error("用户登出失败:", e);
+        }
+
+        return Result.success(ConfigMessage.LOGOUT_SUCCESS);
+    }
+}

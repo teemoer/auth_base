@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.auth.dao.PdMenuDictMapper">
+    <!-- PdMenuDict的resultMap,column是给数据库列起的别名,它对应property类的属性 -->
+    <resultMap id="result_PdMenuDict_Map" type="com.easy.auth.bean.PdMenuDict">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="path" property="path"/>
+        <result column="views" property="views"/>
+        <result column="type" property="type"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="style_class" property="styleClass"/>
+        <result column="level" property="level"/>
+        <result column="is_menu" property="isMenu"/>
+
+        <result column="sort" property="sort"/>
+
+        <result column="creat_time" property="creatTime"/>
+    </resultMap>
+    <!-- assist是查询辅助工具类, ${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- updateAssist用于更新数据查询辅助工具类,作用assist与一致 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:pd_menu_dict的列名 -->
+    <sql id="pd_menu_dict_Column">
+        id, name, path, creat_time, views, type, parent_id, level, is_menu, style_class, sort
+    </sql>
+
+
+
+    <!--获得类名为:PdMenuDict对应的数据库表的数据总行数 -->
+    <select id="getPdMenuDictRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+        select count(*) from pd_menu_dict
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </select>
+
+    <!-- 获得类名为:PdMenuDict对应数据库中表的数据集合 -->
+    <select id="selectPdMenuDict" parameterType="com.util.Assist" resultMap="result_PdMenuDict_Map">
+        select
+        <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+                <include refid="pd_menu_dict_Column"/>
+            </otherwise>
+        </choose>
+        from pd_menu_dict
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+        <if test="order !=null">${order}</if>
+        <choose>
+            <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize}</when>
+            <when test="rowSize !=null">LIMIT #{rowSize}</when>
+        </choose>
+    </select>
+    <!-- 通过PdMenuDict的id获得对应数据库中表的数据对象 -->
+    <select id="selectPdMenuDictById" parameterType="Integer" resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict
+        where id = #{id}
+    </select>
+    <select id="selectPdMenuDictByPath" parameterType="java.lang.String" resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict
+        where path = #{path}
+    </select>
+    <select id="selectByPath" parameterType="com.easy.auth.bean.PdMenuDict"
+            resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict where path = #{path} and id !=#{id}
+    </select>
+    <!-- 获得一个PdMenuDict对象,以参数PdMenuDict对象中不为空的属性作为条件进行查询 -->
+    <select id="selectPdMenuDictObjSingle" parameterType="com.easy.auth.bean.PdMenuDict"
+            resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict
+        <where>
+            <if test="name != null">and name = #{name}</if>
+            <if test="path != null">and path = #{path}</if>
+            <if test="creatTime != null">and creat_time = #{creatTime}</if>
+            <if test="id != null">and id = #{id}</if>
+            <if test="model != null">and model = #{model}</if>
+        </where>
+        LIMIT 1
+    </select>
+    <!-- 获得PdMenuDict对象,以参数PdMenuDict对象中不为空的属性作为条件进行查询 -->
+    <select id="selectByParentId" parameterType="java.lang.Integer" resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict where parent_id=#{parentId}
+    </select>
+
+
+    <!-- 获得PdMenuDict对象,以参数PdMenuDict对象中不为空的属性作为条件进行查询 -->
+    <select id="selectPdMenuDictByObj" parameterType="com.easy.auth.bean.PdMenuDict"
+            resultMap="result_PdMenuDict_Map">
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict
+        <where>
+            <if test="name != null">and name = #{name}</if>
+            <if test="styleClass != null">and style_class = #{styleClass}</if>
+            <if test="path != null">and path = #{path}</if>
+            <if test="id != null">and id = #{id}</if>
+            <if test="views != null">and views = #{views}</if>
+            <if test="type != null">and type = #{type}</if>
+            <if test="parentId != null">and parent_id = #{parentId}</if>
+            <if test="level != null">and level = #{level}</if>
+
+            <if test="isMenu != null">and is_menu = #{isMenu}</if>
+            <if test="sort != null">and sort = #{sort}</if>
+
+        </where>
+        order by sort asc
+    </select>
+    <select id="selectMenuByLikeMenuNameOrPath" resultType="string"
+            resultMap="result_PdMenuDict_Map"
+    >
+        select
+        <include refid="pd_menu_dict_Column"/>
+        from pd_menu_dict
+        where path like "%"#{menuNameOrPath}"%" or name like "%"#{menuNameOrPath}"%"
+    </select>
+
+
+    <!-- 将PdMenuDict中属性值不为null的数据,插入到对应数据库的表中 -->
+    <insert id="insertNotNullPdMenuDict" parameterType="com.easy.auth.bean.PdMenuDict">
+        insert into pd_menu_dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="path != null">path,</if>
+            <if test="views != null">views,</if>
+            <if test="type != null">type,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="level != null">level,</if>
+            <if test="isMenu != null">is_menu,</if>
+            <if test="sort != null">sort,</if>
+
+
+            <if test="styleClass != null">style_class,</if>
+            creat_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="path != null">#{path},</if>
+            <if test="views != null">#{views},</if>
+            <if test="type != null">#{type},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="level != null">#{level},</if>
+            <if test="isMenu != null">#{isMenu},</if>
+            <if test="sort != null">#{sort},</if>
+
+            <if test="styleClass != null">#{styleClass},</if>
+            #{creatTime},
+        </trim>
+    </insert>
+
+    <!-- 将PdMenuDict批量插入到对应数据库的表中 -->
+    <insert id="insertPdMenuDictByBatch" parameterType="ArrayList">
+        insert into pd_menu_dict(id,name,path,creat_time) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.name},#{item.path},#{item.creatTime})
+        </foreach>
+    </insert>
+
+
+    <!-- 通过PdMenuDict的id将数据库表中对应的数据删除 -->
+    <delete id="deletePdMenuDictById" parameterType="Integer">
+        DELETE
+        FROM pd_menu_dict
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将PdMenuDict对应的数据库表的数据删除 -->
+    <delete id="deletePdMenuDictByAssist" parameterType="com.util.Assist">
+        delete from pd_menu_dict
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </delete>
+
+    <!-- 通过PdMenuDict的id将PdMenuDict的数据更新到数据库中对应的表,包括值null的数据 -->
+    <update id="updatePdMenuDictById" parameterType="com.easy.auth.bean.PdMenuDict">
+        update pd_menu_dict set
+        <set>
+            name = #{name} ,
+            path = #{path} ,
+            creat_time = #{creatTime} ,
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过PdMenuDict的id将PdMenuDict中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullPdMenuDictById" parameterType="com.easy.auth.bean.PdMenuDict">
+        update pd_menu_dict
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="styleClass != null">style_class = #{styleClass},</if>
+            <if test="views != null">views = #{views},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="isMenu != null">is_menu = #{isMenu},</if>
+            <if test="sort != null">sort = #{sort},</if>
+
+            <if test="parentId != null">parent_id = #{parentId},</if>
+
+            <if test="creatTime != null">creat_time = #{creatTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将PdMenuDict中的数据更新到数据库对应的表中,包括值为null的数据 -->
+    <update id="updatePdMenuDict" parameterType="map">
+        update pd_menu_dict
+        <set>
+            id = #{enti.id},
+            name = #{enti.name},
+            path = #{enti.path},
+            creat_time = #{enti.creatTime},
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将PdMenuDict中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullPdMenuDict" parameterType="map">
+        update pd_menu_dict
+        <set>
+            <if test="enti.id != null">id = #{enti.id},</if>
+            <if test="enti.name != null">name = #{enti.name},</if>
+            <if test="enti.path != null">path = #{enti.path},</if>
+            <if test="enti.creatTime != null">creat_time = #{enti.creatTime},</if>
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+
+</mapper>
