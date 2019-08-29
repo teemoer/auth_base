@@ -98,7 +98,8 @@ public class Result implements Serializable {
 
     public static Result failure() {
         Result result = new Result();
-        result.setCode(false);
+        result.setCode(-200);
+        result.setSuccess(false);
         result.setMsg("操作失败!");
         return result;
     }
