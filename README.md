@@ -25,7 +25,9 @@
 
 - 并且打开 name为 REDIS_CONSOLE 的  appender     
 
-- ELK服务的搭建  之前 本人有出过视频教程   [点我传送到腾讯云下载观看](链接：https://share.weiyun.com/5aY4ErT)
+- ELK服务的搭建  之前 本人有出过视频教程  
+
+ [点我传送到腾讯云下载观看](链接：https://share.weiyun.com/5aY4ErT)
   
 - 然后访问 ELK服务器ip地址:5601  即可
 
@@ -67,7 +69,7 @@
 
 - 常用注解类型
 
-    ![](./mdFile/img/APILIST.png)
+    ![](/mdFile/img/APILIST.png)
 
 
 
