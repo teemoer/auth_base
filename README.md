@@ -27,7 +27,7 @@
 
 - ELK服务的搭建  之前 本人有出过视频教程  
 
- [点我传送到腾讯云下载观看](链接：https://share.weiyun.com/5aY4ErT)
+ [点我传送到腾讯云下载观看](https://share.weiyun.com/5aY4ErT)
   
 - 然后访问 ELK服务器ip地址:5601  即可
 
