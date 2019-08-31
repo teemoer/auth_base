@@ -175,7 +175,7 @@ public class SocketIOServiceImpl implements SocketIOService {
         } else {
             for (String one : socketSendBatchMsgDto.getUserUniquenessIdList()) {
                 Result result = senMessageToUserByuserUniquenessId(socketSendBatchMsgDto.getMsg(), one);
-                if (result.getCode()) {
+                if (result.getSuccess()) {
                     successCount++;
                 } else {
                     failureCount++;

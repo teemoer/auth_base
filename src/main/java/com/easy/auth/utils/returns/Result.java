@@ -15,8 +15,8 @@ import java.io.Serializable;
  *
  * <p>@Source: Created with IntelliJ IDEA.
  * <p>
- *
- *
+ * <p>
+ * <p>
  * `@JsonInclude(JsonInclude.Include.NON_NULL)  //为 不输出  为null 的key
  */
 @Data
@@ -157,5 +157,17 @@ public class Result implements Serializable {
             setSuccess(false);
         }
         setMsg(resultCode.message());
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public void setCode(Boolean boole) {
+        if (boole) {
+            setCode(200);
+        } else {
+            setCode(-200);
+        }
     }
 }

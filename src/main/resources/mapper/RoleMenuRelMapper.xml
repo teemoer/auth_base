@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.auth.dao.RoleMenuRelMapper">
+    <!-- RoleMenuRel的resultMap,column是给数据库列起的别名,它对应property类的属性 -->
+    <resultMap id="result_RoleMenuRel_Map" type="com.easy.auth.bean.RoleMenuRel">
+		<id column="id" property="id" />
+        <result column="role_id" property="roleId" />
+		<result column="role_name" property="roleName" />
+		<result column="menu_id" property="menuId" />
+		<result column="create_by_user_name" property="createByUserName" />
+		<result column="create_date" property="createDate" />
+    </resultMap>
+
+    <!-- 数据库中表名为:role_menu_rel的列名 -->
+    <sql id="role_menu_rel_Column">
+		id as id,role_name as roleName,menu_id as menuId,create_by_user_name as createByUserName,role_id as roleId,create_date as createDate
+    </sql>
+    <!-- assist是查询辅助工具类, ${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- updateAssist用于更新数据查询辅助工具类,作用assist与一致 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+    <!--获得类名为:RoleMenuRel对应的数据库表的数据总行数 -->
+    <select id="getRoleMenuRelRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+        select count(*) from role_menu_rel
+        <if test="require!=null">
+            <include refid="assist" />
+        </if>
+    </select>
+
+    <!-- 获得类名为:RoleMenuRel对应数据库中表的数据集合 -->
+    <select id="selectRoleMenuRel" parameterType="com.util.Assist" resultMap="result_RoleMenuRel_Map">
+        select
+        <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+                <include refid="role_menu_rel_Column" />
+            </otherwise>
+        </choose>
+        from role_menu_rel
+        <if test="require!=null">
+            <include refid="assist" />
+        </if>
+        <if test="order !=null">${order}</if>
+        <choose>
+            <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize} </when>
+            <when test="rowSize !=null">LIMIT #{rowSize}</when>
+        </choose>
+    </select>
+	<!-- 通过RoleMenuRel的id获得对应数据库中表的数据对象 -->
+	<select id="selectRoleMenuRelById" parameterType="Integer" resultMap="result_RoleMenuRel_Map">
+        select
+        <include refid="role_menu_rel_Column" />
+        from role_menu_rel
+        where id = #{id}
+    </select>
+
+    <!-- 获得一个RoleMenuRel对象,以参数RoleMenuRel对象中不为空的属性作为条件进行查询 -->
+    <select id="selectRoleMenuRelObjSingle" parameterType="com.easy.auth.bean.RoleMenuRel" resultMap="result_RoleMenuRel_Map">
+        select
+        <include refid="role_menu_rel_Column" />
+        from role_menu_rel
+        <where>
+		<if test="roleName != null"> and role_name = #{roleName}</if>
+		<if test="menuId != null"> and menu_id = #{menuId}</if>
+		<if test="createByUserName != null"> and create_by_user_name = #{createByUserName}</if>
+		<if test="roleId != null"> and role_id = #{roleId}</if>
+		<if test="createDate != null"> and create_date = #{createDate}</if>
+		<if test="id != null"> and id = #{id} </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!-- 获得RoleMenuRel对象,以参数RoleMenuRel对象中不为空的属性作为条件进行查询 -->
+    <select id="selectRoleMenuRelByObj" parameterType="com.easy.auth.bean.RoleMenuRel" resultMap="result_RoleMenuRel_Map">
+        select
+        <include refid="role_menu_rel_Column" />
+        from role_menu_rel
+        <where>
+		<if test="roleName != null"> and role_name = #{roleName}</if>
+		<if test="menuId != null"> and menu_id = #{menuId}</if>
+		<if test="createByUserName != null"> and create_by_user_name = #{createByUserName}</if>
+		<if test="roleId != null"> and role_id = #{roleId}</if>
+		<if test="createDate != null"> and create_date = #{createDate}</if>
+		<if test="id != null"> and id = #{id} </if>
+        </where>
+    </select>
+
+    <!-- 将RoleMenuRel插入到对应数据库的表中,包括属性值为null的数据 -->
+    <insert id="insertRoleMenuRel" parameterType="com.easy.auth.bean.RoleMenuRel">
+        insert into
+	role_menu_rel (id,role_name,menu_id,create_by_user_name,role_id,create_date)
+        values(#{id},#{roleName},#{menuId},#{createByUserName},#{roleId},#{createDate})
+    </insert>
+
+    <!-- 将RoleMenuRel中属性值不为null的数据,插入到对应数据库的表中 -->
+    <insert id="insertNotNullRoleMenuRel" parameterType="com.easy.auth.bean.RoleMenuRel">
+        insert into role_menu_rel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="roleName != null">role_name,</if>
+                <if test="menuId != null">menu_id,</if>
+                <if test="createByUserName != null">create_by_user_name,</if>
+                <if test="roleId != null">role_id,</if>
+                <if test="createDate != null">create_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id},</if>
+                <if test="roleName != null">#{roleName},</if>
+                <if test="menuId != null">#{menuId},</if>
+                <if test="createByUserName != null">#{createByUserName},</if>
+                <if test="roleId != null">#{roleId},</if>
+                <if test="createDate != null">#{createDate},</if>
+        </trim>
+    </insert>
+
+    <!-- 将RoleMenuRel批量插入到对应数据库的表中 -->
+    <insert id="insertRoleMenuRelByBatch" parameterType="ArrayList">
+        insert into role_menu_rel(id,role_name,menu_id,create_by_user_name,role_id,create_date) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.roleName},#{item.menuId},#{item.createByUserName},#{item.roleId},#{item.createDate})
+        </foreach>
+    </insert>
+
+	<!-- 通过RoleMenuRel的id将数据库表中对应的数据删除 -->
+	<delete id="deleteRoleMenuRelById" parameterType="Integer">
+        delete from role_menu_rel
+        where  id  =  #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将RoleMenuRel对应的数据库表的数据删除 -->
+    <delete id="deleteRoleMenuRelByAssist" parameterType="com.util.Assist">
+        delete from role_menu_rel
+        <if test="require!=null">
+            <include refid="assist" />
+        </if>
+    </delete>
+
+	<!-- 通过RoleMenuRel的id将RoleMenuRel的数据更新到数据库中对应的表,包括值null的数据 -->
+	<update id="updateRoleMenuRelById" parameterType="com.easy.auth.bean.RoleMenuRel">
+        update role_menu_rel set
+        <set>
+				role_name = #{roleName} ,
+				menu_id = #{menuId} ,
+				create_by_user_name = #{createByUserName} ,
+				role_id = #{roleId} ,
+				create_date = #{createDate} ,
+        </set>
+        where id = #{id}
+    </update>
+
+	<!-- 通过RoleMenuRel的id将RoleMenuRel中属性值不为null的数据更新到数据库对应的表中 -->
+	<update id="updateNotNullRoleMenuRelById" parameterType="com.easy.auth.bean.RoleMenuRel">
+        update role_menu_rel
+        <set>
+					<if test="roleName != null">role_name = #{roleName},</if>
+					<if test="menuId != null">menu_id = #{menuId},</if>
+					<if test="createByUserName != null">create_by_user_name = #{createByUserName},</if>
+					<if test="roleId != null">role_id = #{roleId},</if>
+					<if test="createDate != null">create_date = #{createDate},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将RoleMenuRel中的数据更新到数据库对应的表中,包括值为null的数据 -->
+    <update id="updateRoleMenuRel" parameterType="map">
+        update role_menu_rel
+        <set>
+			id = #{enti.id},
+			role_name = #{enti.roleName},
+			menu_id = #{enti.menuId},
+			create_by_user_name = #{enti.createByUserName},
+			role_id = #{enti.roleId},
+			create_date = #{enti.createDate},
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist" />
+        </if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将RoleMenuRel中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullRoleMenuRel" parameterType="map">
+        update role_menu_rel
+        <set>
+            <if test="enti.id != null">id = #{enti.id},</if>
+            <if test="enti.roleName != null">role_name = #{enti.roleName},</if>
+            <if test="enti.menuId != null">menu_id = #{enti.menuId},</if>
+            <if test="enti.createByUserName != null">create_by_user_name = #{enti.createByUserName},</if>
+            <if test="enti.roleId != null">role_id = #{enti.roleId},</if>
+            <if test="enti.createDate != null">create_date = #{enti.createDate},</if>
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist" />
+        </if>
+    </update>
+</mapper>

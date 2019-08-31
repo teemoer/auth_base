@@ -2,6 +2,7 @@ package com.easy.auth.bean;
 
 import com.easy.auth.common.AdminLoginFormDbDto;
 import com.easy.auth.enums.common.EnableStatusEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +27,12 @@ public class SysUser extends AdminLoginFormDbDto {
     @ApiModelProperty(value = "", notes = "")
     private String userName;
     @ApiModelProperty(value = "", notes = "")
+    /*
+     * json序列化向前端输出内容的时候
+     *
+     * 不输出数据库中存储的密码
+     */
+    @JsonIgnore
     private String password;
     @ApiModelProperty(value = "", notes = "")
     private String uniquenessId;

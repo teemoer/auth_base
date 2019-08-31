@@ -1,8 +1,9 @@
 package com.easy.auth.controller.sys;
 
 import com.easy.auth.bean.PdMenuDict;
-import com.easy.auth.utils.page.PageVo;
+import com.easy.auth.enums.common.EnableStatusEnum;
 import com.easy.auth.service.PdMenuDictService;
+import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,59 +35,60 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pdMenuDict")
 @Api(" 系统所有api菜单 - 控制层")
 public class PdApiMenuDictController {
-  @Autowired private PdMenuDictService pdMenuDictService;
+    @Autowired
+    private PdMenuDictService pdMenuDictService;
 
-  /**
-   * 新增菜单
-   *
-   * @param co
-   * @return
-   */
-  @PostMapping("/save")
-  @ApiOperation("新增系统菜单api")
-  public Result save(@RequestBody PdMenuDict co) {
-    return pdMenuDictService.saveNotNull(co);
-  }
+    /**
+     * 新增菜单
+     *
+     * @param co
+     * @return
+     */
+    @PostMapping("/save")
+    @ApiOperation("新增系统菜单api")
+    public Result save(@RequestBody PdMenuDict co) {
+        return pdMenuDictService.saveNotNull(co);
+    }
 
-  @PostMapping("/delete")
-  @ApiOperation("根据id删除菜单api")
-  public Result delete(Integer id) {
-    return pdMenuDictService.deleteById(id);
-  }
+    @PostMapping("/delete")
+    @ApiOperation("根据id删除菜单api")
+    public Result delete(Integer id) {
+        return pdMenuDictService.deleteById(id);
+    }
 
-  @GetMapping("/findAllMenu")
-  @ApiOperation("获取所有的菜单api信息")
-  @ApiImplicitParam(
-          required = false,
-          defaultValue = "2",
-          dataType = "int",
-          value = "isMenu",
-          name = "isMenu")
-  public Result findAllMenu(@RequestParam(required = false, defaultValue = "2") Integer isMenu) {
-    return pdMenuDictService.findAllMenu(isMenu);
-  }
+    @GetMapping("/findAllMenu")
+    @ApiOperation("获取所有的菜单api信息")
+    @ApiImplicitParam(
+            required = false,
+            defaultValue = "ENABLE",
+            dataType = "String",
+            value = "menuStatus",
+            name = "menuStatus")
+    public Result findAllMenu(@RequestParam(required = false) EnableStatusEnum menuStatus) {
+        return pdMenuDictService.findAllMenu(menuStatus);
+    }
 
-  /**
-   * 分页查询所有的菜单api
-   *
-   * @param pageBaseVo
-   * @return
-   */
-  @PostMapping("/findMenuByPage")
-  @ApiOperation("分页查询所有的菜单api")
-  public Result findMenu(@RequestBody @ApiParam(required = true) PageVo<PdMenuDict> pageBaseVo) {
-    return pdMenuDictService.findByPage(pageBaseVo);
-  }
+    /**
+     * 分页查询所有的菜单api
+     *
+     * @param pageBaseVo
+     * @return
+     */
+    @PostMapping("/findMenuByPage")
+    @ApiOperation("分页查询所有的菜单api")
+    public Result findMenu(@RequestBody @ApiParam(required = true) PageVo<PdMenuDict> pageBaseVo) {
+        return pdMenuDictService.findByPage(pageBaseVo);
+    }
 
-  /**
-   * 修改菜单api信息 - id值必须传递
-   *
-   * @param pdMenuDict
-   * @return
-   */
-  @PostMapping("/update")
-  @ApiOperation("修改菜单api信息 - id值必须传递")
-  public Result update(@RequestBody PdMenuDict pdMenuDict) {
-    return pdMenuDictService.updateNotNullById(pdMenuDict);
-  }
+    /**
+     * 修改菜单api信息 - id值必须传递
+     *
+     * @param pdMenuDict
+     * @return
+     */
+    @PostMapping("/update")
+    @ApiOperation("修改菜单api信息 - id值必须传递")
+    public Result update(@RequestBody PdMenuDict pdMenuDict) {
+        return pdMenuDictService.updateNotNullById(pdMenuDict);
+    }
 }

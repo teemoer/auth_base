@@ -135,5 +135,8 @@ public interface UserMapper {
 
     User selectOneByUserName(@Param("userName") String userName);
 
-    User getUserByUserUniquenessId(String userUniquenessId);
+    User getUserByUserUniquenessId(@Param("userUniquenessId") String userUniquenessId);
+
+    List<String> findUserModelListByUniquenessId(@Param("userUniquenessId") String uniquenessId);
+
 }

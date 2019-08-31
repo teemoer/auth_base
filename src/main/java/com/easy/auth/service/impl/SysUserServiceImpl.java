@@ -86,7 +86,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public List findUserModelListByUniquenessId(String uniquenessId) {
-        return null;
+        return sysUserMapper.findUserModelListByUniquenessId(uniquenessId);
     }
 
     @Override

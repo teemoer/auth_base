@@ -47,6 +47,9 @@ public class RoleValid extends HandlerInterceptorAdapter {
     @Value("${system.enable.auth}")
     private Boolean enableAuth = false;
 
+    @Value("${system.info.admin.user.name}")
+    private String systemAdminUserName = "";
+
     public static Map<String, String> getAllWhiteUrlListUrlMap() {
         return allWhiteUrlListUrlMap;
     }
@@ -128,7 +131,7 @@ public class RoleValid extends HandlerInterceptorAdapter {
                     /*
                      *如果是admin账户 就全局放行
                      */
-                    if ("admin".equalsIgnoreCase(adminLoginFormDbDto.getUserName())) {
+                    if (adminLoginFormDbDto.getUserName().equalsIgnoreCase(systemAdminUserName)) {
                         return true;
                     }
 

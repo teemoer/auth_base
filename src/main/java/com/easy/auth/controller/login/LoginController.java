@@ -47,7 +47,7 @@ import java.util.Map;
  */
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/common")
 @PropertySource({"classpath:application.properties"})
 @Api("用户登录 - 控制层")
 public class LoginController {
@@ -70,7 +70,7 @@ public class LoginController {
      * @param bResult
      * @return
      */
-    @PostMapping("/common/login")
+    @PostMapping("/login")
     @ApiOperation("  后台  登录接口")
     public Result adminLogin(
             @RequestBody @Valid @ApiParam(required = true) AdminLoginDto adminLoginDto,
@@ -113,42 +113,26 @@ public class LoginController {
             Map<String, Object> outLoginInfoMap = new HashMap(6);
             outLoginInfoMap.put("token", jwt);
             adminLoginFormDbDto.setToken(jwt);
-            List modelList = null;
+            List menuList = null;
             /*
              *控制json输出 密码为 null
              */
             adminLoginFormDbDto.setPassword(null);
             if (adminLoginFormDbDto instanceof SysUser) {
+                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.SYS_USER.getValue());
+                /*
+                 * 管理员用户
+                 */
+                menuList = sysUserService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
+            } else {
+                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.USER.getValue());
                 /*
                  * 普通用户
                  */
-                modelList = sysUserService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
-
-                outLoginInfoMap.put("user", adminLoginFormDbDto);
-                /*
-                 * 获取当前用户所拥有的 模块的 下所拥有的所有功能id
-                 */
-                List<String> function = sysUserService.findFunctionListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
-
-                outLoginInfoMap.put("function", function);
-                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.SYS_USER.getValue());
-            } else {
-                /*
-                 *单位用户
-                 */
-                outLoginInfoMap.put("user", adminLoginFormDbDto);
-                /*
-                 * 获取当前单位拥有的模块菜单
-                 */
-                modelList = userService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
-                /*
-                 * 获取当前单位模块的所有功能id
-                 */
-                List<String> function = userService.findFunctionListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
-                outLoginInfoMap.put("function", function);
-                adminLoginFormDbDto.setUserTableType(UserTableTypeEnum.USER.getValue());
+                menuList = userService.findUserModelListByUniquenessId(adminLoginFormDbDto.getUniquenessId());
             }
-            outLoginInfoMap.put("modelList", modelList);
+            outLoginInfoMap.put("user", adminLoginFormDbDto);
+            outLoginInfoMap.put("menuList", menuList);
             RedisUtil.addLoginInfo(jwt, adminLoginFormDbDto, SysConstans.AUTH_TIME_OUT);
             return Result.success(outLoginInfoMap);
         } else {
@@ -161,7 +145,7 @@ public class LoginController {
      *
      * @return
      */
-    @PostMapping("/common/logout")
+    @PostMapping("/logout")
     @ApiOperation("用户退出系统")
     public Result logout(HttpServletRequest request) {
         try {

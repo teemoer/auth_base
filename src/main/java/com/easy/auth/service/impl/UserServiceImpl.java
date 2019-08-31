@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List findUserModelListByUniquenessId(String uniquenessId) {
-        return null;
+        return userMapper.findUserModelListByUniquenessId(uniquenessId);
     }
 
     @Override

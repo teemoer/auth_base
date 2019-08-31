@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/SysuserController")
-@Api("Sysuser -控制层")
+@RequestMapping("/api/sysUserController")
+@Api("SysUser -控制层")
 public class SysUserController {
 
     private static Logger logger = LoggerFactory.getLogger(SysUserController.class);

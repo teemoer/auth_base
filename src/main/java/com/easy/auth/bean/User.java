@@ -22,13 +22,18 @@ import lombok.Data;
 public class User extends AdminLoginFormDbDto {
     @ApiModelProperty(value = "", notes = "")
     private Integer id;
-    @ApiModelProperty(value = "", notes = "")
+    @ApiModelProperty(value = "登录用户名", notes = "")
     private String userName;
     @ApiModelProperty(value = "", notes = "")
+    /*
+     * json序列化向前端输出内容的时候
+     *
+     * 不输出数据库中存储的密码
+     */
     private String password;
     @ApiModelProperty(value = "是否启用", notes = "")
     private EnableStatusEnum enableStatus;
-    @ApiModelProperty(value = "", notes = "")
+    @ApiModelProperty(value = "创建时间", notes = "")
     private java.util.Date createDate;
     @ApiModelProperty(value = "用户唯一标识  为uuid", notes = "")
     private String uniquenessId;

@@ -1,7 +1,7 @@
-package com.easy.auth.controller;
+package com.easy.auth.controller.auth;
 
-import com.easy.auth.bean.User;
-import com.easy.auth.service.UserService;
+import com.easy.auth.bean.RoleMenuRel;
+import com.easy.auth.service.RoleMenuRelService;
 import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;
 import io.swagger.annotations.Api;
@@ -18,26 +18,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 普通用户基础信息 的路由接口服务
+ * RoleMenuRel 的路由接口服务
  *
  * @author
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/userController")
-@Api("普通用户基础信息 -控制层")
-public class UserController {
+@RequestMapping("/api/roleMenuRelController")
+@Api("RoleMenuRel -控制层")
+public class RoleMenuRelController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static Logger logger = LoggerFactory.getLogger(RoleMenuRelController.class);
 
     /**
-     * User Service服务
+     * RoleMenuRel Service服务
      */
     @Autowired
-    private UserService userService;
+    private RoleMenuRelService roleMenuRelService;
 
     /**
-     * 通过id查询User数据的方法
+     * 通过id查询RoleMenuRel数据的方法
      *
      * @param id
      * @return
@@ -45,26 +45,26 @@ public class UserController {
     @ApiOperation(value = "根据id获取数据", notes = "使用url传参")
     @GetMapping("/findById")
     public Result findById(Integer id) {
-        return Result.success(userService.findOne(id));
+        return Result.success(roleMenuRelService.findOne(id));
     }
 
     /**
-     * 通过id删除User数据方法
+     * 通过id删除RoleMenuRel数据方法
      *
      * @return
      */
     @ApiOperation(value = "根据ID删除数据", notes = "使用url传参")
     @PostMapping("/deleteById")
     public Result deleteById(@ApiParam(required = true) Integer id) {
-        return Result.success(userService.deleteById(id));
+        return Result.success(roleMenuRelService.deleteById(id));
     }
 
 
     @PostMapping("/findListByCondition")
     @ApiOperation(value = "根据条件筛选 获取所有数据", notes = "使用RequestBody传参")
     public Result findAllByCondition(
-            @RequestBody @ApiParam(required = true) User beanValue) {
-        return userService.selectListByObj(beanValue);
+            @RequestBody @ApiParam(required = true) RoleMenuRel beanValue) {
+        return roleMenuRelService.selectListByObj(beanValue);
     }
 
     /**
@@ -76,11 +76,11 @@ public class UserController {
     @PostMapping("/addOrUpdate")
     @ApiOperation(value = "新增或修改", notes = "新增数据请勿携带ID值 修改数据必须携带ID值")
     public Result addOrUpdate(
-            @RequestBody @ApiParam(required = true) User beanValues) {
+            @RequestBody @ApiParam(required = true) RoleMenuRel beanValues) {
         if (beanValues.getId() != null) {
-            return Result.success(userService.updateNotNullById(beanValues));
+            return Result.success(roleMenuRelService.updateNotNullById(beanValues));
         } else {
-            return Result.success(userService.saveNotNull(beanValues));
+            return Result.success(roleMenuRelService.saveNotNull(beanValues));
         }
     }
 
@@ -92,7 +92,7 @@ public class UserController {
      */
     @PostMapping("/findByPage")
     @ApiOperation(value = "分页查询", notes = "使用RequestBody传参")
-    public Result findByPage(@RequestBody @ApiParam(required = true) PageVo<User> pageBaseVo) {
-        return userService.findByPageVo(pageBaseVo);
+    public Result findByPage(@RequestBody @ApiParam(required = true) PageVo<RoleMenuRel> pageBaseVo) {
+        return roleMenuRelService.findByPageVo(pageBaseVo);
     }
 }

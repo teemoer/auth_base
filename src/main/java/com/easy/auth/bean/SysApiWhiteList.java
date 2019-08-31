@@ -46,5 +46,5 @@ public class SysApiWhiteList {
      */
     //    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createDate;
 }

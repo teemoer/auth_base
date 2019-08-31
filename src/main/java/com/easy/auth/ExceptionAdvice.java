@@ -47,231 +47,235 @@ import java.util.UUID;
 @CrossOrigin
 public class ExceptionAdvice {
 
-  private static Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
+    private static Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
 
-  /** 400 - Bad Request */
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler({
-          HttpMessageNotReadableException.class,
-          MissingServletRequestParameterException.class,
-          BindException.class,
-          ServletRequestBindingException.class,
-          MethodArgumentNotValidException.class,
-          ConstraintViolationException.class
-  })
-  public Result handleHttpMessageNotReadableException(
-          HttpServletRequest httpServletRequest, Exception e) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+    /**
+     * 400 - Bad Request
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            HttpMessageNotReadableException.class,
+            MissingServletRequestParameterException.class,
+            BindException.class,
+            ServletRequestBindingException.class,
+            MethodArgumentNotValidException.class,
+            ConstraintViolationException.class
+    })
+    public Result handleHttpMessageNotReadableException(
+            HttpServletRequest httpServletRequest, Exception e) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
 
-    Result result = new Result();
-      result.setData("参数解析失败,错误信息为:" + e.getMessage() + " \n错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n解析参数400报错,"
-                    + ResultCode.BAD_REQUEST.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    if (e instanceof BindException) {
+        Result result = new Result();
+        result.setData("参数解析失败,错误信息为:" + e.getMessage() + " \n错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n解析参数400报错,"
+                        + ResultCode.BAD_REQUEST.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        if (e instanceof BindException) {
 
-      result.setMsg(ResultCode.BAD_REQUEST.message());
-      return result;
+            result.setMsg(ResultCode.BAD_REQUEST.message());
+            return result;
+        }
+
+        result.setMsg(ResultCode.BAD_REQUEST.message());
+
+        return result;
     }
 
-    result.setMsg(ResultCode.BAD_REQUEST.message());
+    /**
+     * 405 - Method Not Allowed
+     */
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setResultCode(ResultCode.METHOD_NOT_ALLOWED);
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求405跨域错误,"
+                        + ResultCode.METHOD_NOT_ALLOWED.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        return result;
+    }
 
-    return result;
-  }
+    @ExceptionHandler(UnknownAccountException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result handleUnknownAccountException(
+            UnknownAccountException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setResultCode(ResultCode.INVALID_TOKEN);
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求授权错误,"
+                        + ResultCode.INVALID_TOKEN.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
 
-  /** 405 - Method Not Allowed */
-  @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public Result handleHttpRequestMethodNotSupportedException(
-          HttpRequestMethodNotSupportedException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setResultCode(ResultCode.METHOD_NOT_ALLOWED);
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求405跨域错误,"
-                    + ResultCode.METHOD_NOT_ALLOWED.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    return result;
-  }
+        return result;
+    }
 
-  @ExceptionHandler(UnknownAccountException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public Result handleUnknownAccountException(
-          UnknownAccountException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setResultCode(ResultCode.INVALID_TOKEN);
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求授权错误,"
-                    + ResultCode.INVALID_TOKEN.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result handleHttpRequestMethodNotSupportedException(
+            AuthorizationException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setResultCode(ResultCode.INVALID_TOKEN);
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求授权错误,"
+                        + ResultCode.INVALID_TOKEN.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        return result;
+    }
 
-    return result;
-  }
+    /**
+     * shiro权限异常处理
+     *
+     * @return
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Result unauthorizedException(
+            UnauthorizedException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result failure = Result.failure(ResultCode.UNAUTHO_ERROR);
+        failure.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求授权错误,"
+                        + ResultCode.UNAUTHO_ERROR.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + failure.getData().toString(),
+                e);
+        return failure;
+    }
 
-  @ExceptionHandler(AuthorizationException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public Result handleHttpRequestMethodNotSupportedException(
-          AuthorizationException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setResultCode(ResultCode.INVALID_TOKEN);
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求授权错误,"
-                    + ResultCode.INVALID_TOKEN.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    return result;
-  }
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Result unauthenticatedException(
+            UnauthenticatedException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        RedisUtil.adminOperatingSysUserModule();
+        Result result = new Result();
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求授权错误,"
+                        + ResultCode.UNAUTHO_ERROR.message()
+                        + " \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        result.setResultCode(ResultCode.UNAUTHO_ERROR);
+        return result;
+    }
 
-  /**
-   * shiro权限异常处理
-   *
-   * @return
-   */
-  @ExceptionHandler(UnauthorizedException.class)
-  @ResponseStatus(HttpStatus.OK)
-  public Result unauthorizedException(
-          UnauthorizedException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result failure = Result.failure(ResultCode.UNAUTHO_ERROR);
-      failure.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求授权错误,"
-                    + ResultCode.UNAUTHO_ERROR.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + failure.getData().toString(),
-            e);
-    return failure;
-  }
+    /**
+     * 500
+     *
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public Result handleMethodArgumentTypeMismatchException(
+            Exception e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setResultCode(ResultCode.ARGUMENT_TYPE_MISMATCH);
+        result.setData("参数类型转化错误信息为:" + e.getMessage() + " \n 错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求服务器错误,参数转化异常 \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        return result;
+    }
 
-  @ExceptionHandler(UnauthenticatedException.class)
-  @ResponseStatus(HttpStatus.OK)
-  public Result unauthenticatedException(
-          UnauthenticatedException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-      RedisUtil.adminOperatingSysUserModule();
-    Result result = new Result();
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求授权错误,"
-                    + ResultCode.UNAUTHO_ERROR.message()
-                    + " \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    result.setResultCode(ResultCode.UNAUTHO_ERROR);
-    return result;
-  }
+    /**
+     * 500
+     *
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public Result handleException(Exception e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setResultCode(ResultCode.SYSTEM_ERR);
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求服务器错误,服务器内部错误 \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        return result;
+    }
 
-  /**
-   * 500
-   *
-   * @param e
-   * @return
-   */
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  public Result handleMethodArgumentTypeMismatchException(
-          Exception e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setResultCode(ResultCode.ARGUMENT_TYPE_MISMATCH);
-      result.setData("参数类型转化错误信息为:" + e.getMessage() + " \n 错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求服务器错误,参数转化异常 \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    return result;
-  }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public Result handle404Exception(
+            NoHandlerFoundException e, HttpServletRequest httpServletRequest) {
+        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
+        Result result = new Result();
+        result.setSuccess(false);
+        result.setMsg("接口:" + requestInfo.getRequestUrl() + " 不存在！");
+        result.setData("错误编号为:" + generateErrorCode());
+        logger.error(
+                "\n请求服务器错误,服务器内部错误 \nurl:"
+                        + requestInfo.getRequestUrl()
+                        + "\n请求参数为:\n"
+                        + requestInfo.getAllRequestParam()
+                        + "\n"
+                        + result.getData().toString(),
+                e);
+        return result;
+    }
 
-  /**
-   * 500
-   *
-   * @param e
-   * @return
-   */
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(Exception.class)
-  public Result handleException(Exception e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setResultCode(ResultCode.SYSTEM_ERR);
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求服务器错误,服务器内部错误 \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    return result;
-  }
-
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(NoHandlerFoundException.class)
-  public Result handle404Exception(
-          NoHandlerFoundException e, HttpServletRequest httpServletRequest) {
-    AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-    Result result = new Result();
-    result.setCode(false);
-    result.setMsg("接口:" + requestInfo.getRequestUrl() + " 不存在！");
-      result.setData("错误编号为:" + generateErrorCode());
-    logger.error(
-            "\n请求服务器错误,服务器内部错误 \nurl:"
-                    + requestInfo.getRequestUrl()
-                    + "\n请求参数为:\n"
-                    + requestInfo.getAllRequestParam()
-                    + "\n"
-                    + result.getData().toString(),
-            e);
-    return result;
-  }
-
-  private AdviceDto getRequestInfo(HttpServletRequest httpServletRequest) {
-    return new AdviceDto(httpServletRequest);
-  }
+    private AdviceDto getRequestInfo(HttpServletRequest httpServletRequest) {
+        return new AdviceDto(httpServletRequest);
+    }
 
     private String generateErrorCode() {
-    return UUID.randomUUID().toString().replaceAll("-", "");
-  }
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 }

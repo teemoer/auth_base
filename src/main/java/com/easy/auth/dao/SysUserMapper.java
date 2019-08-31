@@ -134,4 +134,6 @@ public interface SysUserMapper {
 	SysUser selectOneByUserName(@Param("userName")String userName);
 
     AdminLoginFormDbDto getSysUserByUserUniquenessId(@Param("userUniquenessId")String userUniquenessId);
+
+    List<String> findUserModelListByUniquenessId(String uniquenessId);
 }

@@ -49,8 +49,8 @@ public class SysApiWhiteListServiceImpl implements SysApiWhiteListService {
 
     @Override
     public Result saveOrUpdate(SysApiWhiteList sysApiWhiteList) {
-        if (sysApiWhiteList.getCreateTime() == null && sysApiWhiteList.getId() == null) {
-            sysApiWhiteList.setCreateTime(new Date());
+        if (sysApiWhiteList.getCreateDate() == null && sysApiWhiteList.getId() == null) {
+            sysApiWhiteList.setCreateDate(new Date(System.currentTimeMillis()));
         }
         try {
 

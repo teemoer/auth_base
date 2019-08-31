@@ -116,6 +116,12 @@
         where id = #{id}
     </select>
 
+    <select id="findUserModelListByUniquenessId" resultType="java.lang.String">
+        select path
+        from pd_menu_dict
+        where path is not null
+    </select>
+
     <!-- 获得一个SysUser对象,以参数SysUser对象中不为空的属性作为条件进行查询 -->
     <select id="selectSysUserObjSingle" parameterType="com.easy.auth.bean.SysUser" resultMap="result_SysUser_Map">
         select
@@ -266,4 +272,5 @@
             <include refid="updateAssist"/>
         </if>
     </update>
+
 </mapper>

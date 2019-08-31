@@ -1,6 +1,7 @@
 package com.easy.auth.service;
 
 import com.easy.auth.bean.PdMenuDict;
+import com.easy.auth.enums.common.EnableStatusEnum;
 import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;
 
@@ -24,7 +25,7 @@ public interface PdMenuDictService {
 
   Result findByPage(PageVo<PdMenuDict> beanPage);
 
-    Result findAllMenu(Integer isMenu);
+    Result findAllMenu(EnableStatusEnum menuStatus);
 
   /**
    * 将PdMenuDict中属性值不为null的数据到数据库

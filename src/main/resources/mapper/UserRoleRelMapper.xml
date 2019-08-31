@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.auth.dao.UserRoleRelMapper">
+    <!-- UserRoleRel的resultMap,column是给数据库列起的别名,它对应property类的属性 -->
+    <resultMap id="result_UserRoleRel_Map" type="com.easy.auth.bean.UserRoleRel">
+        <id column="id" property="id"/>
+        <id column="role_id" property="roleId"/>
+        <result column="uniquenessId" property="uniquenessId"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="enable_status" property="enableStatus"/>
+        <result column="create_date" property="createDate"/>
+    </resultMap>
+
+    <!-- 数据库中表名为:user_role_rel的列名 -->
+    <sql id="user_role_rel_Column">
+        id as id,uniquenessId as uniquenessId,create_user_name as createUserName,
+enable_status as enableStatus,create_date as createDate,role_id as roleId
+    </sql>
+    <!-- assist是查询辅助工具类, ${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- updateAssist用于更新数据查询辅助工具类,作用assist与一致 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null">
+                    #{req.value}
+                </if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="value" separator=",">
+                        #{value}
+                    </foreach>
+                </if>
+                <if test="req.customRequire !=null">
+                    <foreach collection="req.customRequire" item="cr" separator=" ">
+                        ${cr.require}
+                        <if test="cr.value != null">
+                            #{cr.value}
+                        </if>
+                        <if test="cr.values != null">
+                            <foreach collection="cr.values" item="value"
+                                     separator=",">
+                                #{value}
+                            </foreach>
+                        </if>
+                        <if test="cr.suffix != null">${cr.suffix}</if>
+                    </foreach>
+                </if>
+                <if test="req.suffix != null">${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+    <!--获得类名为:UserRoleRel对应的数据库表的数据总行数 -->
+    <select id="getUserRoleRelRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+        select count(*) from user_role_rel
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </select>
+
+    <!-- 获得类名为:UserRoleRel对应数据库中表的数据集合 -->
+    <select id="selectUserRoleRel" parameterType="com.util.Assist" resultMap="result_UserRoleRel_Map">
+        select
+        <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+                <include refid="user_role_rel_Column"/>
+            </otherwise>
+        </choose>
+        from user_role_rel
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+        <if test="order !=null">${order}</if>
+        <choose>
+            <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize}</when>
+            <when test="rowSize !=null">LIMIT #{rowSize}</when>
+        </choose>
+    </select>
+    <!-- 通过UserRoleRel的id获得对应数据库中表的数据对象 -->
+    <select id="selectUserRoleRelById" parameterType="Integer" resultMap="result_UserRoleRel_Map">
+        select
+        <include refid="user_role_rel_Column"/>
+        from user_role_rel
+        where id = #{id}
+    </select>
+
+    <!-- 获得一个UserRoleRel对象,以参数UserRoleRel对象中不为空的属性作为条件进行查询 -->
+    <select id="selectUserRoleRelObjSingle" parameterType="com.easy.auth.bean.UserRoleRel"
+            resultMap="result_UserRoleRel_Map">
+        select
+        <include refid="user_role_rel_Column"/>
+        from user_role_rel
+        <where>
+            <if test="uniquenessId != null">and uniquenessId = #{uniquenessId}</if>
+            <if test="createUserName != null">and create_user_name = #{createUserName}</if>
+            <if test="enableStatus != null">and enable_status = #{enableStatus,jdbcType=VARCHAR}</if>
+            <if test="createDate != null">and create_date = #{createDate}</if>
+            <if test="id != null">and id = #{id}</if>
+            <if test="roleId != null">and role_id = #{roleId}</if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!-- 获得UserRoleRel对象,以参数UserRoleRel对象中不为空的属性作为条件进行查询 -->
+    <select id="selectUserRoleRelByObj" parameterType="com.easy.auth.bean.UserRoleRel"
+            resultMap="result_UserRoleRel_Map">
+        select
+        <include refid="user_role_rel_Column"/>
+        from user_role_rel
+        <where>
+            <if test="uniquenessId != null">and uniquenessId = #{uniquenessId}</if>
+            <if test="createUserName != null">and create_user_name = #{createUserName}</if>
+            <if test="enableStatus != null">and enable_status = #{enableStatus,jdbcType=VARCHAR}</if>
+            <if test="createDate != null">and create_date = #{createDate}</if>
+            <if test="id != null">and id = #{id}</if>
+            <if test="roleId != null">and role_id = #{roleId}</if>
+        </where>
+    </select>
+
+    <!-- 将UserRoleRel插入到对应数据库的表中,包括属性值为null的数据 -->
+    <insert id="insertUserRoleRel" parameterType="com.easy.auth.bean.UserRoleRel">
+        insert into user_role_rel (id, uniquenessId, create_user_name, enable_status, create_date, role_id)
+        values (#{id}, #{uniquenessId}, #{createUserName}, #{enableStatus,jdbcType=VARCHAR}, #{createDate}, #{roleId})
+    </insert>
+
+    <!-- 将UserRoleRel中属性值不为null的数据,插入到对应数据库的表中 -->
+    <insert id="insertNotNullUserRoleRel" parameterType="com.easy.auth.bean.UserRoleRel">
+        insert into user_role_rel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uniquenessId != null">uniquenessId,</if>
+            <if test="createUserName != null">create_user_name,</if>
+            <if test="enableStatus != null">enable_status,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="roleId != null">role_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uniquenessId != null">#{uniquenessId},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="enableStatus != null">#{enableStatus,jdbcType=VARCHAR},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="roleId != null">#{roleId},</if>
+        </trim>
+    </insert>
+
+    <!-- 将UserRoleRel批量插入到对应数据库的表中 -->
+    <insert id="insertUserRoleRelByBatch" parameterType="ArrayList">
+        insert into user_role_rel(id,uniquenessId,create_user_name,enable_status,create_date,role_id) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.id},#{item.uniquenessId},#{item.createUserName},#{item.enableStatus,jdbcType=VARCHAR},#{item.createDate},#{item.roleId})
+        </foreach>
+    </insert>
+
+    <!-- 通过UserRoleRel的id将数据库表中对应的数据删除 -->
+    <delete id="deleteUserRoleRelById" parameterType="Integer">
+        delete
+        from user_role_rel
+        where id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将UserRoleRel对应的数据库表的数据删除 -->
+    <delete id="deleteUserRoleRelByAssist" parameterType="com.util.Assist">
+        delete from user_role_rel
+        <if test="require!=null">
+            <include refid="assist"/>
+        </if>
+    </delete>
+
+    <!-- 通过UserRoleRel的id将UserRoleRel的数据更新到数据库中对应的表,包括值null的数据 -->
+    <update id="updateUserRoleRelById" parameterType="com.easy.auth.bean.UserRoleRel">
+        update user_role_rel set
+        <set>
+            uniquenessId = #{uniquenessId} ,
+            create_user_name = #{createUserName} ,
+            enable_status = #{enableStatus,jdbcType=VARCHAR} ,
+            create_date = #{createDate} ,
+            role_id = #{roleId} ,
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过UserRoleRel的id将UserRoleRel中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullUserRoleRelById" parameterType="com.easy.auth.bean.UserRoleRel">
+        update user_role_rel
+        <set>
+            <if test="uniquenessId != null">uniquenessId = #{uniquenessId},</if>
+            <if test="createUserName != null">create_user_name = #{createUserName},</if>
+            <if test="enableStatus != null">enable_status = #{enableStatus,jdbcType=VARCHAR},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="roleId != null">role_id = #{roleId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将UserRoleRel中的数据更新到数据库对应的表中,包括值为null的数据 -->
+    <update id="updateUserRoleRel" parameterType="map">
+        update user_role_rel
+        <set>
+            id = #{enti.id},
+            uniquenessId = #{enti.uniquenessId},
+            create_user_name = #{enti.createUserName},
+            enable_status = #{enti.enableStatus,jdbcType=VARCHAR},
+            create_date = #{enti.createDate},
+            role_id = #{enti.roleId},
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将UserRoleRel中属性值不为null的数据更新到数据库对应的表中 -->
+    <update id="updateNotNullUserRoleRel" parameterType="map">
+        update user_role_rel
+        <set>
+            <if test="enti.id != null">id = #{enti.id},</if>
+            <if test="enti.uniquenessId != null">uniquenessId = #{enti.uniquenessId},</if>
+            <if test="enti.createUserName != null">create_user_name = #{enti.createUserName},</if>
+            <if test="enti.enableStatus != null">enable_status = #{enti.enableStatus,jdbcType=VARCHAR},</if>
+            <if test="enti.createDate != null">create_date = #{enti.createDate},</if>
+            <if test="enti.roleId != null">role_id = #{enti.roleId},</if>
+        </set>
+        <if test="assist.require!=null">
+            <include refid="updateAssist"/>
+        </if>
+    </update>
+</mapper>
