@@ -81,7 +81,7 @@ public class SocketIOServiceImpl implements SocketIOService {
                         clientMap.put(userUniquenessId, client);
                     } else {
                         Result result = new Result();
-                        result.setCode(false);
+                        result.setSuccess(false);
                         result.setMsg("参数有误,请检查");
                         client.sendEvent(PUSH_EVENT, JSONObject.toJSON(result));
                         client.disconnect();

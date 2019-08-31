@@ -45,12 +45,12 @@ public class GetErrors {
         errorMes = fieldError.getDefaultMessage();
         map.put(fieldError.getField(), errorMes);
       }
-      result.setCode(false);
+      result.setSuccess(false);
       result.setMsg(errorMes);
       result.setData(map);
       return result;
     }
-    result.setCode(true);
+    result.setSuccess(true);
     return result;
   }
 }

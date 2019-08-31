@@ -163,11 +163,5 @@ public class Result implements Serializable {
         this.code = code;
     }
 
-    public void setCode(Boolean boole) {
-        if (boole) {
-            setCode(200);
-        } else {
-            setCode(-200);
-        }
-    }
+
 }
