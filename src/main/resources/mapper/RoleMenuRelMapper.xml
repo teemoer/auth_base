@@ -81,7 +81,7 @@
         </where>
     </sql>
     <!--获得类名为:RoleMenuRel对应的数据库表的数据总行数 -->
-    <select id="getRoleMenuRelRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+    <select id="getRoleMenuRelRowCount" parameterType="com.easy.auth.utils.Assist" resultType="java.lang.Long">
         select count(*) from role_menu_rel
         <if test="require!=null">
             <include refid="assist" />
@@ -89,7 +89,7 @@
     </select>
 
     <!-- 获得类名为:RoleMenuRel对应数据库中表的数据集合 -->
-    <select id="selectRoleMenuRel" parameterType="com.util.Assist" resultMap="result_RoleMenuRel_Map">
+    <select id="selectRoleMenuRel" parameterType="com.easy.auth.utils.Assist" resultMap="result_RoleMenuRel_Map">
         select
         <if test="distinct !=null">${distinct}</if>
         <choose>
@@ -191,7 +191,7 @@
     </delete>
 
     <!-- 通过辅助工具Assist中的条件将RoleMenuRel对应的数据库表的数据删除 -->
-    <delete id="deleteRoleMenuRelByAssist" parameterType="com.util.Assist">
+    <delete id="deleteRoleMenuRelByAssist" parameterType="com.easy.auth.utils.Assist">
         delete from role_menu_rel
         <if test="require!=null">
             <include refid="assist" />

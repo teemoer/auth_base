@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
 /**
- *  SpringContextTools
+ * SpringContextTools
  *
  * <p>@Author: 连晋
  *
@@ -15,19 +15,29 @@ import org.springframework.util.Assert;
  * <p>@Source: Created with IntelliJ IDEA.
  */
 public class SpringContextHolder {
-  private static ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
 
-  public static ApplicationContext getApplicationContext() {
-    return applicationContext;
-  }
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 
-  public static void setApplicationContext(ApplicationContext applicationContext) {
-    SpringContextHolder.applicationContext = applicationContext;
-  }
+    public static void setApplicationContext(ApplicationContext applicationContext) {
+        SpringContextHolder.applicationContext = applicationContext;
+    }
 
-  /** 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型. */
-  public static <T> T getBean(Class<T> requiredType) {
-    Assert.notNull(applicationContext);
-    return applicationContext.getBean(requiredType);
-  }
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    public static <T> T getBeanByClass(Class<T> requiredType) {
+        Assert.notNull(applicationContext);
+        return applicationContext.getBean(requiredType);
+    }
+
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    public static <T> T getBeanByNameAndClass(String beanName, Class<T> requiredType) {
+        Assert.notNull(applicationContext);
+        return applicationContext.getBean(beanName, requiredType);
+    }
 }

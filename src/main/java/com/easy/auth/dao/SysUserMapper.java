@@ -1,11 +1,11 @@
 package com.easy.auth.dao;
-import java.util.List;
 
 import com.easy.auth.bean.SysUser;
 import com.easy.auth.common.AdminLoginFormDbDto;
-import com.util.Assist;
-
+import com.easy.auth.utils.Assist;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 /**
  * 系统管理员 mapper
  *

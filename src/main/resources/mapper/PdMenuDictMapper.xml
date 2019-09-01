@@ -91,7 +91,7 @@
 
 
     <!--获得类名为:PdMenuDict对应的数据库表的数据总行数 -->
-    <select id="getPdMenuDictRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+    <select id="getPdMenuDictRowCount" parameterType="com.easy.auth.utils.Assist" resultType="java.lang.Long">
         select count(*) from pd_menu_dict
         <if test="require!=null">
             <include refid="assist"/>
@@ -99,7 +99,7 @@
     </select>
 
     <!-- 获得类名为:PdMenuDict对应数据库中表的数据集合 -->
-    <select id="selectPdMenuDict" parameterType="com.util.Assist" resultMap="result_PdMenuDict_Map">
+    <select id="selectPdMenuDict" parameterType="com.easy.auth.utils.Assist" resultMap="result_PdMenuDict_Map">
         select
         <if test="distinct !=null">${distinct}</if>
         <choose>
@@ -244,7 +244,7 @@
     </delete>
 
     <!-- 通过辅助工具Assist中的条件将PdMenuDict对应的数据库表的数据删除 -->
-    <delete id="deletePdMenuDictByAssist" parameterType="com.util.Assist">
+    <delete id="deletePdMenuDictByAssist" parameterType="com.easy.auth.utils.Assist">
         delete from pd_menu_dict
         <if test="require!=null">
             <include refid="assist"/>

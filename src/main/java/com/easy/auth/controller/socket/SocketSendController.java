@@ -9,7 +9,7 @@ import com.easy.auth.controller.socket.dto.SocketSingleSendMsgDto;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.service.SysSocketMsgTaskCacheService;
 import com.easy.auth.service.SysUserService;
-import com.easy.auth.service.impl.SocketIOServiceImpl;
+import com.easy.auth.service.impl.SocketIoServiceImpl;
 import com.easy.auth.utils.GetErrors;
 import com.easy.auth.utils.returns.Result;
 import com.easy.auth.utils.user.UserInfoUtils;
@@ -57,7 +57,7 @@ public class SocketSendController {
    */
   @GetMapping("/getOnlineList")
   public Result getOnlineList() {
-    return Result.success(SocketIOServiceImpl.getClientMap().keySet());
+    return Result.success(SocketIoServiceImpl.getClientMap().keySet());
   }
 
   /**
@@ -117,7 +117,7 @@ public class SocketSendController {
           @RequestBody @ApiParam(required = true) SocketSendBatchMsgDto socketSendBatchMsgDto) {
 
     List<String> onlineUserUniquenessIdList =
-            new ArrayList<>(SocketIOServiceImpl.getClientMap().keySet());
+            new ArrayList<>(SocketIoServiceImpl.getClientMap().keySet());
     socketSendBatchMsgDto.setUserUniquenessIdList(onlineUserUniquenessIdList);
     return saveMsgLog(socketSendBatchMsgDto);
   }
@@ -153,7 +153,7 @@ public class SocketSendController {
                       socketSingleSendMsgDto.getMsg());
 
       Result result =
-              SocketIOServiceImpl.senMessageToUserByuserUniquenessId(
+              SocketIoServiceImpl.senMessageToUserByuserUniquenessId(
                       socketSingleSendMsgDto.getMsg(), socketSingleSendMsgDto.getUserUniquenessId());
 
       if (result.judgeSuccess()) {
@@ -199,7 +199,7 @@ public class SocketSendController {
                                   socketSendBatchMsgDto.getMsg());
 
                   Result result =
-                          SocketIOServiceImpl.senMessageToUserByuserUniquenessId(
+                          SocketIoServiceImpl.senMessageToUserByuserUniquenessId(
                                   socketSendBatchMsgDto.getMsg(), receiveUserInfo.getUniquenessId());
 
                   if (result.judgeSuccess()) {

@@ -1,20 +1,18 @@
 package com.easy.auth.service.impl;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.easy.auth.bean.UserRoleRel;
+import com.easy.auth.dao.UserRoleRelMapper;
+import com.easy.auth.service.UserRoleRelService;
 import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.easy.auth.service.UserRoleRelService;
-import com.easy.auth.dao.UserRoleRelMapper;
-import com.util.Assist;
-import com.easy.auth.bean.UserRoleRel;
+import java.util.List;
 /**
  * UserRoleRel的服务接口的实现类
  * 

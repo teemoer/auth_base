@@ -3,14 +3,14 @@ package com.easy.auth.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.easy.auth.common.spring.SpringContextHolder;
 import com.easy.auth.controller.socket.dto.SocketSendBatchMsgDto;
-import com.easy.auth.service.SocketIOService;
+import com.easy.auth.service.SocketIoService;
 import com.easy.auth.utils.returns.Result;
 import com.easy.auth.utils.user.UserInfoUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -30,15 +30,18 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>@Source: Created with IntelliJ IDEA.
  */
-@Service(value = "socketIOService")
-public class SocketIOServiceImpl implements SocketIOService {
-    private static Logger logger = LoggerFactory.getLogger(SocketIOServiceImpl.class);
+@Service(value = "socketIoService")
+public class SocketIoServiceImpl implements SocketIoService {
+    private static Logger logger = LoggerFactory.getLogger(SocketIoServiceImpl.class);
     /**
      * 存储已连接的客户端
      */
     private static Map<String, SocketIOClient> clientMap = new ConcurrentHashMap<>();
 
-    @Autowired
+    public SocketIoServiceImpl() {
+        socketIOServer = SpringContextHolder.getBeanByNameAndClass("mySocketIOServer", SocketIOServer.class);
+    }
+
     private SocketIOServer socketIOServer;
 
     /**
@@ -89,7 +92,7 @@ public class SocketIOServiceImpl implements SocketIOService {
                 });
         // 监听通知事件
         socketIOServer.addEventListener(
-                SocketIOService.PUSH_EVENT,
+                SocketIoService.PUSH_EVENT,
                 String.class,
                 (client, data, ackRequest) -> {
                     logger.debug("有消息下发:" + data);
@@ -152,7 +155,7 @@ public class SocketIOServiceImpl implements SocketIOService {
     }
 
     private static void setClientMap(Map<String, SocketIOClient> clientMap) {
-        SocketIOServiceImpl.clientMap = clientMap;
+        SocketIoServiceImpl.clientMap = clientMap;
     }
 
     /**
@@ -203,7 +206,7 @@ public class SocketIOServiceImpl implements SocketIOService {
         SocketIOClient ioClient = clientMap.get(userUniquenessId);
         if (ioClient != null) {
             try {
-                ioClient.sendEvent(SocketIOService.PUSH_EVENT, JSONObject.toJSON(msg));
+                ioClient.sendEvent(SocketIoService.PUSH_EVENT, JSONObject.toJSON(msg));
                 return Result.success();
             } catch (Exception e) {
                 return Result.failure();
@@ -233,7 +236,7 @@ public class SocketIOServiceImpl implements SocketIOService {
             SocketIOClient socketioclient = clientMap.get(one);
             if (socketioclient != null) {
                 try {
-                    socketioclient.sendEvent(SocketIOService.PUSH_EVENT, JSONObject.toJSON(msg));
+                    socketioclient.sendEvent(SocketIoService.PUSH_EVENT, JSONObject.toJSON(msg));
                     successCount++;
                 } catch (Exception e) {
                     failureCount++;

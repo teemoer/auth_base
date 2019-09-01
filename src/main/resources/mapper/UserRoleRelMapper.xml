@@ -82,7 +82,7 @@ enable_status as enableStatus,create_date as createDate,role_id as roleId
         </where>
     </sql>
     <!--获得类名为:UserRoleRel对应的数据库表的数据总行数 -->
-    <select id="getUserRoleRelRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+    <select id="getUserRoleRelRowCount" parameterType="com.easy.auth.utils.Assist" resultType="java.lang.Long">
         select count(*) from user_role_rel
         <if test="require!=null">
             <include refid="assist"/>
@@ -90,7 +90,7 @@ enable_status as enableStatus,create_date as createDate,role_id as roleId
     </select>
 
     <!-- 获得类名为:UserRoleRel对应数据库中表的数据集合 -->
-    <select id="selectUserRoleRel" parameterType="com.util.Assist" resultMap="result_UserRoleRel_Map">
+    <select id="selectUserRoleRel" parameterType="com.easy.auth.utils.Assist" resultMap="result_UserRoleRel_Map">
         select
         <if test="distinct !=null">${distinct}</if>
         <choose>
@@ -194,7 +194,7 @@ enable_status as enableStatus,create_date as createDate,role_id as roleId
     </delete>
 
     <!-- 通过辅助工具Assist中的条件将UserRoleRel对应的数据库表的数据删除 -->
-    <delete id="deleteUserRoleRelByAssist" parameterType="com.util.Assist">
+    <delete id="deleteUserRoleRelByAssist" parameterType="com.easy.auth.utils.Assist">
         delete from user_role_rel
         <if test="require!=null">
             <include refid="assist"/>

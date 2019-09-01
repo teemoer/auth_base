@@ -1,21 +1,19 @@
 package com.easy.auth.service.impl;
-import java.util.List;
 
+import com.easy.auth.bean.RoleMenuRel;
+import com.easy.auth.dao.RoleMenuRelMapper;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.easy.auth.service.RoleMenuRelService;
 import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.easy.auth.service.RoleMenuRelService;
-import com.easy.auth.dao.RoleMenuRelMapper;
-import com.util.Assist;
-import com.easy.auth.bean.RoleMenuRel;
+import java.util.List;
 /**
  * RoleMenuRel的服务接口的实现类
  * 

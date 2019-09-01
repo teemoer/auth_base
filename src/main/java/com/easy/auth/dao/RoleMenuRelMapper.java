@@ -1,10 +1,10 @@
 package com.easy.auth.dao;
-import java.util.List;
 
-import com.util.Assist;
 import com.easy.auth.bean.RoleMenuRel;
-
+import com.easy.auth.utils.Assist;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 /**
  * RoleMenuRel的Dao接口
  * 

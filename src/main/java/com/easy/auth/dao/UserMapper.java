@@ -1,7 +1,7 @@
 package com.easy.auth.dao;
 
 import com.easy.auth.bean.User;
-import com.util.Assist;
+import com.easy.auth.utils.Assist;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

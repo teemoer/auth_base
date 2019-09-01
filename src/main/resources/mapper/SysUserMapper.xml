@@ -81,7 +81,7 @@
     </sql>
 
     <!--获得类名为:sysUser对应的数据库表的数据总行数 -->
-    <select id="getSysUserRowCount" parameterType="com.util.Assist" resultType="java.lang.Long">
+    <select id="getSysUserRowCount" parameterType="com.easy.auth.utils.Assist" resultType="java.lang.Long">
         select count(*) from sys_user
         <if test="require!=null">
             <include refid="assist"/>
@@ -89,7 +89,7 @@
     </select>
 
     <!-- 获得类名为:sysUser对应数据库中表的数据集合 -->
-    <select id="selectSysUser" parameterType="com.util.Assist" resultMap="result_SysUser_Map">
+    <select id="selectSysUser" parameterType="com.easy.auth.utils.Assist" resultMap="result_SysUser_Map">
         select
         <if test="distinct !=null">${distinct}</if>
         <choose>
@@ -208,7 +208,7 @@
     </delete>
 
     <!-- 通过辅助工具Assist中的条件将sysUser对应的数据库表的数据删除 -->
-    <delete id="deleteSysUserByAssist" parameterType="com.util.Assist">
+    <delete id="deleteSysUserByAssist" parameterType="com.easy.auth.utils.Assist">
         delete from sys_user
         <if test="require!=null">
             <include refid="assist"/>

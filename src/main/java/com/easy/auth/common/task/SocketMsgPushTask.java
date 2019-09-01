@@ -4,7 +4,7 @@ import com.easy.auth.bean.SysSocketMsgTaskCache;
 import com.easy.auth.common.enums.common.EnableStatusEnum;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.service.SysSocketMsgTaskCacheService;
-import com.easy.auth.service.impl.SocketIOServiceImpl;
+import com.easy.auth.service.impl.SocketIoServiceImpl;
 import com.easy.auth.utils.returns.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class SocketMsgPushTask {
     @Scheduled(cron = "0/20 * * * * *")
     public void pushMsg() {
         logger.debug("开始执行task,检测未成功发送的 socket msg任务 ");
-        Set<String> onlineUserSet = SocketIOServiceImpl.getClientMap().keySet();
+        Set<String> onlineUserSet = SocketIoServiceImpl.getClientMap().keySet();
         logger.debug("socket在线用户数量为:" + onlineUserSet.size());
         if (onlineUserSet.size() > 0) {
             int countSendWaitSocketMsg = RedisUtil.countSendWaitSocketMsg();
@@ -59,7 +59,7 @@ public class SocketMsgPushTask {
                                 if (sysSocketMsgTaskCache != null) {
                                     if (onlineUserSet.contains(sysSocketMsgTaskCache.getReceiveUserUniquenessId())) {
                                         Result result =
-                                                SocketIOServiceImpl.senMessageToUserByuserUniquenessId(
+                                                SocketIoServiceImpl.senMessageToUserByuserUniquenessId(
                                                         sysSocketMsgTaskCache.getMsg(), sysSocketMsgTaskCache.getReceiveUserUniquenessId());
                                         if (result.judgeSuccess()) {
                                             RedisUtil.removeSendWaitSocketMsg(sysSocketMsgTaskCache.getId());

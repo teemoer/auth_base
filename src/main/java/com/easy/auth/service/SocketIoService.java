@@ -1,6 +1,6 @@
 package com.easy.auth.service;
 
-public interface SocketIOService {
+public interface SocketIoService {
 
     /*
      * 推送的事件

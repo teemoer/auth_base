@@ -2,6 +2,11 @@ package com.easy.auth.common.socket;
 
 import com.corundumstudio.socketio.SocketConfig;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.easy.auth.controller.socket.SocketInfoController;
+import com.easy.auth.utils.PortUtil;
+import com.easy.auth.utils.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
  * <p>@Source: Created with IntelliJ IDEA.
  */
 @Configuration
-public class SocketIOConfig {
-
+public class SocketIoConfig {
+    private static Logger logger = LoggerFactory.getLogger(SocketIoConfig.class);
     @Value("${socketio.host}")
     private String host;
 
@@ -49,7 +54,7 @@ public class SocketIOConfig {
      *
      * @return
      */
-    @Bean
+    @Bean(name = "mySocketIOServer")
     public SocketIOServer socketIOServer() {
         SocketConfig socketConfig = new SocketConfig();
         socketConfig.setTcpNoDelay(true);
@@ -66,6 +71,14 @@ public class SocketIOConfig {
         config.setUpgradeTimeout(upgradeTimeout);
         config.setPingTimeout(pingTimeout);
         config.setPingInterval(pingInterval);
-        return new SocketIOServer(config);
+        SocketIOServer socketIOServer;
+        if (PortUtil.isLocalePortUsing(config.getPort())) {
+            config.setPort(port + RandomUtils.randomSpecifiedLengthNumber(3));
+            logger.warn("项目启动检测到socket端口:" + port + "被占用,现已重新随机设置socket监听端口为:" + config.getPort() + "");
+        }
+        socketIOServer = new SocketIOServer(config);
+        SocketInfoController.setSocketPort(config.getPort());
+        return socketIOServer;
+
     }
 }

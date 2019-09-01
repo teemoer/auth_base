@@ -1,7 +1,7 @@
 package com.easy.auth.dao;
 
 import com.easy.auth.bean.SysApiWhiteList;
-import com.util.Assist;
+import com.easy.auth.utils.Assist;
 
 import java.util.List;
 
