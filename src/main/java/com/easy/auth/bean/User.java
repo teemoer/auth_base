@@ -1,7 +1,7 @@
 package com.easy.auth.bean;
 
 import com.easy.auth.common.AdminLoginFormDbDto;
-import com.easy.auth.enums.common.EnableStatusEnum;
+import com.easy.auth.common.enums.common.EnableStatusEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

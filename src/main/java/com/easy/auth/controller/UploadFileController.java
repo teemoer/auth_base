@@ -1,13 +1,13 @@
 package com.easy.auth.controller;
 
+import com.easy.auth.common.config.ConfigMessage;
 import com.easy.auth.common.enhance.MyCustomizeStringList;
 import com.easy.auth.utils.FileUtil;
 import com.easy.auth.utils.des.ImageFileTransfer;
+import com.easy.auth.utils.returns.Result;
 import com.easy.auth.utils.user.UserInfoUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.easy.auth.paramconfig.ConfigMessage;
-import com.easy.auth.utils.returns.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

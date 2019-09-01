@@ -1,8 +1,8 @@
 package com.easy.auth.service.impl;
 
 import com.easy.auth.bean.PdMenuDict;
+import com.easy.auth.common.enums.common.EnableStatusEnum;
 import com.easy.auth.dao.PdMenuDictMapper;
-import com.easy.auth.enums.common.EnableStatusEnum;
 import com.easy.auth.service.PdMenuDictService;
 import com.easy.auth.utils.page.PageVo;
 import com.easy.auth.utils.returns.Result;

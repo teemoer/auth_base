@@ -1,6 +1,6 @@
-package com.easy.auth.enums.common;
+package com.easy.auth.common.enums.common;
 
-import com.easy.auth.enums.base.BaseEnum;
+import com.easy.auth.common.enums.base.BaseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

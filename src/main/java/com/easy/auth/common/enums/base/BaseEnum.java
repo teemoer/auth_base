@@ -1,4 +1,4 @@
-package com.easy.auth.enums.base;
+package com.easy.auth.common.enums.base;
 
 /**
  * BaseEnum

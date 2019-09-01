@@ -1,4 +1,4 @@
-package com.easy.auth.paramconfig;
+package com.easy.auth.common.config;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

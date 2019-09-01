@@ -1,4 +1,4 @@
-package com.easy.auth.paramconfig;
+package com.easy.auth.common.log;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

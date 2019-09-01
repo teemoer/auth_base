@@ -1,8 +1,8 @@
-package com.easy.auth.paramconfig;
+package com.easy.auth.common.log;
 
 import com.easy.auth.bean.SystemLog;
+import com.easy.auth.common.enums.log.SystemLogDescrptionEnum;
 import com.easy.auth.dao.SystemLogMapper;
-import com.easy.auth.enums.log.SystemLogDescrptionEnum;
 import com.easy.auth.utils.ErrorUtils;
 import com.easy.auth.utils.IPUtils;
 import com.easy.auth.utils.returns.Result;
@@ -50,11 +50,11 @@ public class SystemLogAspect {
     @Autowired
     private ErrorUtils errorUtils;
 
-    @Pointcut("@annotation(com.easy.auth.paramconfig.SystemServiceLog)")
+    @Pointcut("@annotation(com.easy.auth.common.log.SystemServiceLog)")
     public void serviceAspect() {
     }
 
-    @Pointcut("@annotation(com.easy.auth.paramconfig.SystemControllerLog)")
+    @Pointcut("@annotation(com.easy.auth.common.log.SystemControllerLog)")
     public void controllerAspect() {
     }
 

@@ -1,7 +1,7 @@
 package com.easy.auth.common.task;
 
 import com.easy.auth.bean.SysSocketMsgTaskCache;
-import com.easy.auth.enums.common.EnableStatusEnum;
+import com.easy.auth.common.enums.common.EnableStatusEnum;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.service.SysSocketMsgTaskCacheService;
 import com.easy.auth.service.impl.SocketIOServiceImpl;

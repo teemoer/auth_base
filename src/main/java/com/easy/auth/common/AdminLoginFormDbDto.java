@@ -1,6 +1,6 @@
 package com.easy.auth.common;
 
-import com.easy.auth.enums.common.EnableStatusEnum;
+import com.easy.auth.common.enums.common.EnableStatusEnum;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package com.easy.auth.paramconfig;
+package com.easy.auth.common.log;
 
-import com.easy.auth.enums.log.SystemLogDescrptionEnum;
+import com.easy.auth.common.enums.log.SystemLogDescrptionEnum;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

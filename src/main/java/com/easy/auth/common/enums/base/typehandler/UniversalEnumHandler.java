@@ -1,8 +1,8 @@
-package com.easy.auth.enums.base.typehandler;
+package com.easy.auth.common.enums.base.typehandler;
 
-import com.easy.auth.enums.common.EnableStatusEnum;
-import com.easy.auth.enums.base.BaseEnum;
-import com.easy.auth.enums.user.UserTableTypeEnum;
+import com.easy.auth.common.enums.base.BaseEnum;
+import com.easy.auth.common.enums.common.EnableStatusEnum;
+import com.easy.auth.common.enums.user.UserTableTypeEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
