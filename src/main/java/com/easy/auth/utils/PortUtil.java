@@ -47,6 +47,7 @@ public class PortUtil {
         try {
             Socket socket = new Socket(theAddress, port);
             flag = true;
+            socket.close();
         } catch (IOException e) {
 
         }
