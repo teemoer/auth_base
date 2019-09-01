@@ -31,7 +31,6 @@ public class AuthConfig extends WebMvcConfigurationSupport {
             .addInterceptor(roleValid)
             .addPathPatterns("/**")
             .excludePathPatterns("/common/upload")
-            .excludePathPatterns("/ueditor/config")
             .excludePathPatterns("/**.js")
             .excludePathPatterns("/**.css")
             .excludePathPatterns("/webjars/**")
@@ -55,7 +54,6 @@ public class AuthConfig extends WebMvcConfigurationSupport {
         .addResourceHandler("/webjars/springfox-swagger-ui/lang/en.js")
         .addResourceLocations(
             "classpath:/META-INF/resources/webjars/springfox-swagger-ui/lang/zh.js");
-    //
   }
 
   @Override

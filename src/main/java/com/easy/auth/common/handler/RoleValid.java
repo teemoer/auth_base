@@ -2,14 +2,14 @@ package com.easy.auth.common.handler;
 
 import com.easy.auth.bean.PdMenuDict;
 import com.easy.auth.common.AdminLoginFormDbDto;
+import com.easy.auth.common.exception.UnauthenticatedException;
+import com.easy.auth.common.exception.UnknownAccountException;
 import com.easy.auth.dao.PdMenuDictMapper;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.service.SysApiWhiteListService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

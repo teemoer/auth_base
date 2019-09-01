@@ -1,7 +1,8 @@
 package com.easy.auth.infrastructure.config.redis.utils;
 
-import com.alibaba.druid.util.StringUtils;
 import com.easy.auth.common.SysConstans;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import redis.clients.jedis.Jedis;
@@ -17,7 +18,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -59,17 +59,6 @@ public class JavaUtil {
 
     private static final String CONFIG_RESOURCE_MANAGER = "application.properties";
 
-    public static String getOrderIdByUUId() {
-        int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if (hashCodeV < 0) { // 有可能是负数
-            hashCodeV = -hashCodeV;
-        }
-        //         0 代表前面补充0
-        //         4 代表长度为4
-        //         d 代表参数为正数型
-        return 1 + String.format("%012d", hashCodeV);
-    }
-
     /**
      * 校验密码是否符合格式
      *
@@ -80,62 +69,9 @@ public class JavaUtil {
         String check = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{5,18}$";
         Pattern regex = Pattern.compile(check);
         Matcher matcher = regex.matcher(password);
-        if (!matcher.matches()) {
-            return false;
-        } else {
-            return true;
-        }
+        return matcher.matches();
     }
 
-    /**
-     * 判断字符串是否为空
-     *
-     * @param str
-     * @return
-     */
-    public static boolean stringIsNull(String str) {
-        if (str != null && !"".equals(str.replaceAll(" ", ""))) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * 判断字符串是否不为空
-     *
-     * @param str
-     * @return
-     */
-    public static boolean stringIsNotNull(String str) {
-        if (str != null && !"".equals(str.replaceAll(" ", ""))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 判断list是否不为空
-     *
-     * @param list
-     * @param <T>
-     * @return
-     */
-    public static <T extends Object> boolean listIsNotEmpty(List<T> list) {
-        return list != null && list.size() > 0;
-    }
-
-    /**
-     * 判断list是否为空
-     *
-     * @param list
-     * @param <T>
-     * @return
-     */
-    public static <T extends Object> boolean listIsEmpty(List<T> list) {
-        return list == null || list.size() == 0;
-    }
 
     /**
      * 根据指定的日期格式生成日期时间串
@@ -274,7 +210,7 @@ public class JavaUtil {
      */
     public static boolean isPhoneNo(String phone) {
         // 手机号验证
-        if (JavaUtil.stringIsNull(phone)) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(phone)) {
             return false;
         } else if (!JavaUtil.isMobilePhone(phone)) {
             return false;
@@ -340,58 +276,6 @@ public class JavaUtil {
     }
 
     /**
-     * 工号获取主键id策略
-     *
-     * @param phoneNo
-     * @return
-     */
-    public static String generateLoginNo(String phoneNo) {
-
-        return System.currentTimeMillis() / 1000 + phoneNo.substring(7, 11);
-    }
-
-    /**
-     * 用户注册获取主键id策略
-     *
-     * @param
-     * @return
-     */
-    public static String generateId() {
-
-        return System.currentTimeMillis() / 1000 + "";
-    }
-
-    /**
-     * 获取幼儿年龄
-     *
-     * @return
-     */
-    public static Integer getAge(Date birthDate, String healthDate) {
-        // 计算年龄
-        Integer birthdayYear = getYear(birthDate);
-        Integer birthdayMonth = getMonth(birthDate);
-        // Date date = new Date();
-        Date createDate = null;
-        if (stringIsNull(healthDate)) {
-            createDate = new Date();
-        } else {
-            createDate = stringToFormatDate(healthDate);
-        }
-        Integer nowYear = getYear(createDate);
-        Integer nowMonth = getMonth(createDate) - birthdayMonth;
-        Integer age = nowYear - birthdayYear;
-        age = nowMonth >= 0 ? age : age - 1;
-        if (age != null && age > 6) {
-            age = 6;
-        }
-
-        if (age != null && age < 3) {
-            age = 3;
-        }
-        return age;
-    }
-
-    /**
      * map转对象
      *
      * @param map
@@ -405,8 +289,7 @@ public class JavaUtil {
         }
 
         Object obj = beanClass.newInstance();
-
-        org.apache.commons.beanutils.BeanUtils.populate(obj, map);
+        BeanUtils.populate(obj, map);
 
         return obj;
     }
@@ -462,9 +345,9 @@ public class JavaUtil {
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (name.equalsIgnoreCase(cookies[i].getName())) {
-                    return cookies[i].getValue();
+            for (Cookie cookie : cookies) {
+                if (name.equalsIgnoreCase(cookie.getName())) {
+                    return cookie.getValue();
                 }
             }
         }

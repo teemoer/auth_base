@@ -1,14 +1,12 @@
 package com.easy.auth;
 
 import com.easy.auth.common.advice.AdviceDto;
+import com.easy.auth.common.exception.UnauthenticatedException;
+import com.easy.auth.common.exception.UnknownAccountException;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.utils.returns.Result;
 import com.easy.auth.utils.returns.ResultCode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthenticatedException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -134,51 +132,6 @@ public class ExceptionAdvice {
         return result;
     }
 
-    @ExceptionHandler(AuthorizationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public Result handleHttpRequestMethodNotSupportedException(
-            AuthorizationException e, HttpServletRequest httpServletRequest) {
-        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-        Result result = new Result();
-        result.setResultCode(ResultCode.INVALID_TOKEN);
-        result.setData("错误编号为:" + generateErrorCode());
-        logger.error(
-                "\n请求授权错误,"
-                        + ResultCode.INVALID_TOKEN.message()
-                        + " \nurl:"
-                        + requestInfo.getRequestUrl()
-                        + "\n请求参数为:\n"
-                        + requestInfo.getAllRequestParam()
-                        + "\n"
-                        + result.getData().toString(),
-                e);
-        return result;
-    }
-
-    /**
-     * shiro权限异常处理
-     *
-     * @return
-     */
-    @ExceptionHandler(UnauthorizedException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public Result unauthorizedException(
-            UnauthorizedException e, HttpServletRequest httpServletRequest) {
-        AdviceDto requestInfo = getRequestInfo(httpServletRequest);
-        Result failure = Result.failure(ResultCode.UNAUTHO_ERROR);
-        failure.setData("错误编号为:" + generateErrorCode());
-        logger.error(
-                "\n请求授权错误,"
-                        + ResultCode.UNAUTHO_ERROR.message()
-                        + " \nurl:"
-                        + requestInfo.getRequestUrl()
-                        + "\n请求参数为:\n"
-                        + requestInfo.getAllRequestParam()
-                        + "\n"
-                        + failure.getData().toString(),
-                e);
-        return failure;
-    }
 
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseStatus(HttpStatus.OK)

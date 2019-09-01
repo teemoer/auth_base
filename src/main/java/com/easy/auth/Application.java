@@ -90,7 +90,7 @@ public class Application extends WebMvcConfigurerAdapter {
         Map exclusionsMap = Maps.newHashMap();
         exclusionsMap.put(
                 "exclusions",
-                "/common/upload,/ueditor/config,/swagger-ui.html,/file/**,/**.js,/**.css,/webjars/**");
+                "/common/upload,/swagger-ui.html,/file/**,/**.js,/**.css,/webjars/**");
         registrationBean.setInitParameters(exclusionsMap);
         return registrationBean;
     }
