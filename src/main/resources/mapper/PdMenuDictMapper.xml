@@ -7,15 +7,10 @@
         <result column="name" property="name"/>
         <result column="path" property="path"/>
         <result column="views" property="views"/>
-        <result column="type" property="type"/>
         <result column="parent_id" property="parentId"/>
-        <result column="style_class" property="styleClass"/>
-        <result column="level" property="level"/>
-        <result column="is_menu" property="isMenu"/>
-
+        <result column="menu_status" property="menuStatus"/>
         <result column="sort" property="sort"/>
-
-        <result column="creat_time" property="creatTime"/>
+        <result column="create_date" property="creatDate"/>
     </resultMap>
     <!-- assist是查询辅助工具类, ${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
     <sql id="assist">
@@ -85,9 +80,8 @@
 
     <!-- 数据库中表名为:pd_menu_dict的列名 -->
     <sql id="pd_menu_dict_Column">
-        id, name, path, creat_time, views, type, parent_id, level, is_menu, style_class, sort
+        id, name, path, create_date, views, parent_id, level, is_menu, style_class, sort
     </sql>
-
 
 
     <!--获得类名为:PdMenuDict对应的数据库表的数据总行数 -->
@@ -146,7 +140,7 @@
         <where>
             <if test="name != null">and name = #{name}</if>
             <if test="path != null">and path = #{path}</if>
-            <if test="creatTime != null">and creat_time = #{creatTime}</if>
+            <if test="creatDate != null">and create_date = #{creatDate}</if>
             <if test="id != null">and id = #{id}</if>
             <if test="model != null">and model = #{model}</if>
         </where>
@@ -168,15 +162,13 @@
         from pd_menu_dict
         <where>
             <if test="name != null">and name = #{name}</if>
-            <if test="styleClass != null">and style_class = #{styleClass}</if>
             <if test="path != null">and path = #{path}</if>
             <if test="id != null">and id = #{id}</if>
             <if test="views != null">and views = #{views}</if>
-            <if test="type != null">and type = #{type}</if>
             <if test="parentId != null">and parent_id = #{parentId}</if>
             <if test="level != null">and level = #{level}</if>
 
-            <if test="isMenu != null">and is_menu = #{isMenu}</if>
+            <if test="menuStatus != null">and menu_status = #{menuStatus,jdbcType=VARCHAR}</if>
             <if test="sort != null">and sort = #{sort}</if>
 
         </where>
@@ -200,38 +192,31 @@
             <if test="name != null">name,</if>
             <if test="path != null">path,</if>
             <if test="views != null">views,</if>
-            <if test="type != null">type,</if>
             <if test="parentId != null">parent_id,</if>
             <if test="level != null">level,</if>
-            <if test="isMenu != null">is_menu,</if>
+            <if test="menuStatus != null">menu_status,</if>
             <if test="sort != null">sort,</if>
-
-
-            <if test="styleClass != null">style_class,</if>
-            creat_time,
+            create_date,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="name != null">#{name},</if>
             <if test="path != null">#{path},</if>
             <if test="views != null">#{views},</if>
-            <if test="type != null">#{type},</if>
             <if test="parentId != null">#{parentId},</if>
             <if test="level != null">#{level},</if>
-            <if test="isMenu != null">#{isMenu},</if>
+            <if test="menuStatus != null">#{menuStatus,jdbcType=VARCHAR},</if>
             <if test="sort != null">#{sort},</if>
-
-            <if test="styleClass != null">#{styleClass},</if>
-            #{creatTime},
+            #{creatDate},
         </trim>
     </insert>
 
     <!-- 将PdMenuDict批量插入到对应数据库的表中 -->
     <insert id="insertPdMenuDictByBatch" parameterType="ArrayList">
-        insert into pd_menu_dict(id,name,path,creat_time) values
+        insert into pd_menu_dict(id,name,path,create_date) values
         <foreach collection="list" item="item" index="index"
                  separator=",">
-            (#{item.id},#{item.name},#{item.path},#{item.creatTime})
+            (#{item.id},#{item.name},#{item.path},#{item.creatDate})
         </foreach>
     </insert>
 
@@ -257,7 +242,7 @@
         <set>
             name = #{name} ,
             path = #{path} ,
-            creat_time = #{creatTime} ,
+            create_date = #{creatDate} ,
         </set>
         where id = #{id}
     </update>
@@ -268,15 +253,13 @@
         <set>
             <if test="name != null">name = #{name},</if>
             <if test="path != null">path = #{path},</if>
-            <if test="styleClass != null">style_class = #{styleClass},</if>
             <if test="views != null">views = #{views},</if>
-            <if test="type != null">type = #{type},</if>
-            <if test="isMenu != null">is_menu = #{isMenu},</if>
+            <if test="menu_status != null">menu_status = #{menuStatus,jdbcType=VARCHAR},</if>
             <if test="sort != null">sort = #{sort},</if>
 
             <if test="parentId != null">parent_id = #{parentId},</if>
 
-            <if test="creatTime != null">creat_time = #{creatTime},</if>
+            <if test="creatDate != null">create_date = #{creatDate},</if>
         </set>
         where id = #{id}
     </update>
@@ -288,7 +271,7 @@
             id = #{enti.id},
             name = #{enti.name},
             path = #{enti.path},
-            creat_time = #{enti.creatTime},
+            create_date = #{enti.creatDate},
         </set>
         <if test="assist.require!=null">
             <include refid="updateAssist"/>
@@ -302,7 +285,7 @@
             <if test="enti.id != null">id = #{enti.id},</if>
             <if test="enti.name != null">name = #{enti.name},</if>
             <if test="enti.path != null">path = #{enti.path},</if>
-            <if test="enti.creatTime != null">creat_time = #{enti.creatTime},</if>
+            <if test="enti.creatDate != null">create_date = #{enti.creatDate},</if>
         </set>
         <if test="assist.require!=null">
             <include refid="updateAssist"/>
