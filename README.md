@@ -2,7 +2,7 @@
 #  Author:连晋    
 -----
 
-(暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者扫码 `二维码在最下面` )
+(暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者 [点我扫码](#weChat扫码)  )
 
 ----
 ## 基于 springBoot/mybatis/mysql/redis 开发的 一个 权限校验系统 支持 分布式 系统
@@ -175,7 +175,7 @@ public class UserController {
 ```
 
 
-### weChat 扫码
+### weChat扫码
 ----
 
 ![微信二维码 -w389px](/mdFile/img/weChat.jpg )
