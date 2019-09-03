@@ -7,6 +7,7 @@ import com.easy.auth.common.exception.UnknownAccountException;
 import com.easy.auth.dao.PdMenuDictMapper;
 import com.easy.auth.infrastructure.config.redis.utils.RedisUtil;
 import com.easy.auth.service.SysApiWhiteListService;
+import com.github.qcloudsms.httpclient.HTTPMethod;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -86,7 +87,7 @@ public class RoleValid extends HandlerInterceptorAdapter {
         /*
          * OPTIONS 请求放行
          */
-        if ("OPTIONS".equals(request.getMethod())) {
+        if (HTTPMethod.OPTIONS.name().equalsIgnoreCase(request.getMethod())) {
             return true;
         }
 
