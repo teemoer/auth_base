@@ -1,10 +1,8 @@
 
 #  Author:连晋    
-
 -----
-(暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者扫码)
 
-![微信二维码 -w389px](/mdFile/img/weChat.jpg )
+(暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者扫码 `二维码在最下面` )
 
 ----
 ## 基于 springBoot/mybatis/mysql/redis 开发的 一个 权限校验系统 支持 分布式 系统
@@ -177,22 +175,11 @@ public class UserController {
 ```
 
 
+### weChat 扫码
+----
 
+![微信二维码 -w389px](/mdFile/img/weChat.jpg )
 
-### Guides
-The following guides illustrates how to use certain features concretely:
-
-* [Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
-* [Accessing Relational Data using JDBC with Spring](https://spring.io/guides/gs/relational-data-access/)
-* [Managing Transactions](https://spring.io/guides/gs/managing-transactions/)
-* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
-* [Handling Form Submission](https://spring.io/guides/gs/handling-form-submission/)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
 
 
