@@ -151,10 +151,7 @@ public class RoleValid extends HandlerInterceptorAdapter {
 
                     if (pathMap.size() == 0) {
                         menuList = pdMenuDictMapper.findAllMenuByUserUniquenessId(adminLoginFormDbDto.getUniquenessId());
-                    } else {
-                        throw new UnknownAccountException();
-                    }
-                    if (menuList.size() > 0) {
+                    } else if (menuList.size() > 0) {
                         pathMap =
                                 menuList.stream()
                                         .collect(
