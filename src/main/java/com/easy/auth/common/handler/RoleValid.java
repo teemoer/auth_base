@@ -151,12 +151,15 @@ public class RoleValid extends HandlerInterceptorAdapter {
 
                     if (pathMap.size() == 0) {
                         menuList = pdMenuDictMapper.findAllMenuByUserUniquenessId(adminLoginFormDbDto.getUniquenessId());
-                    } else if (menuList.size() > 0) {
-                        pathMap =
-                                menuList.stream()
-                                        .collect(
-                                                Collectors.toMap(PdMenuDict::getPath, PdMenuDict::getPath, (v1, v2) -> v1));
+                        if (menuList.size() > 0) {
+                            pathMap =
+                                    menuList.stream()
+                                            .collect(
+                                                    Collectors.toMap(PdMenuDict::getPath, PdMenuDict::getPath, (v1, v2) -> v1));
+                        }
                     }
+
+
 
                     if (pathMap.size() > 0) {
                         RedisUtil.setUserUniquenessIdAndMenuList(
