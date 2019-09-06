@@ -5,9 +5,11 @@
 (暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者 [点我扫码](#weChat扫码)  )
 
 
------  2019年9月6日 20:03:07 modeifyTip:  最近在啃SpringCloud 估计短时间内没空再开发这个东西了 `我真不是为了偷懒....`
+-----  
 
-233333.... 以前用的是 dubbox  对比了一下 还是比较 看好 SpringCloud `主要是之前不知道....XDDDD`
+- 2019年9月6日 20:03:07 modeifyTip:  最近在啃SpringCloud 估计短时间内没空再开发这个东西了 `我真不是为了偷懒....`
+
+- 233333.... 以前用的是 dubbox  对比了一下 还是比较 看好 SpringCloud `主要是之前不知道....XDDDD`
 
 ----
 ## 基于 springBoot/mybatis/mysql/redis 开发的 一个 权限校验系统 支持 分布式 系统
@@ -158,35 +160,4 @@ public class UserController {
      * @param user
      * @return
      */
-    @ApiOperation(value="更新信息", notes="根据url的id来指定更新用户信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long",paramType = "path"),
-            @ApiImplicitParam(name = "user", value = "用户实体user", required = true, dataType = "User")
-    })
-    @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<JsonResult> update (@PathVariable("id") Integer id, @RequestBody User user){
-...
-        return ResponseEntity.ok(r);
-    }
-
-    @ApiIgnore//使用该注解忽略这个API
-    @RequestMapping(value = "/hi", method = RequestMethod.GET)
-    public String  jsonTest() {
-        return " hi you!";
-    }
-
-
-
-```
-
-
-### weChat扫码
-----
-
-![微信二维码 -w389px](/mdFile/img/weChat.jpg )
-
-
-
-
-
-
+    @ApiOperation(value="更新信息", notes="根据url的id来指定更新用户
