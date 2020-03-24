@@ -1,6 +1,9 @@
 
-#  Author:连晋    
+#  Author:连晋 (jinLian)   
+
 -----
+
+`The integrated development environment of this java project is idea`
 
 (暂未开发完毕,等后续更新吧 有兴趣一起开发的可以 互加 weChat 搜索 `832192` 或者 [点我扫码](#weChat扫码)  )
 
