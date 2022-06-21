@@ -19,7 +19,7 @@
         <java.version>1.8</java.version>
         <dubbo-spring-boot>1.0.0</dubbo-spring-boot>
         <logstash-logback-encoder.version>4.7</logstash-logback-encoder.version>
-        <mysql-connector-java.version>5.1.35</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <hibernate.version>5.2.3.Final</hibernate.version>
     </properties>
 
